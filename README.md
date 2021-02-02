@@ -29,7 +29,7 @@ nidhiarora@Nidhis-MacBook-Pro ~ % pwd
 /Users/nidhiarora
 nidhiarora@Nidhis-MacBook-Pro ~ % /Users/nidhiarora/mongodb/bin/mongod --dbpath=/Users/nidhiarora/mongodb-data
 ```
-You will see some logs running and some port number where mondo is running.
+You will see some logs running and some port number where mondo is running. Keep this running in a terminal to make sure you are connected with db.
 
 ### Install Robo 3T - mongodb GUI
 download it from here [https://robomongo.org/download](https://robomongo.org/download) and install it in your applications.
@@ -45,3 +45,11 @@ download it from here [https://robomongo.org/download](https://robomongo.org/dow
 - Right click pon the database and select `open new shell`
 - type `db.version` and press green play button
 
+### MongoDB Drivers
+These are the ways to interact with MongoDB. [https://docs.mongodb.com/drivers/](https://docs.mongodb.com/drivers/). Select Node.
+
+- [API reference](http://mongodb.github.io/node-mongodb-native/3.6/api/)
+- Install [npm mongodb](https://www.npmjs.com/package/mongodb) official driver package
+
+
+### Connecting to MongoDB with node

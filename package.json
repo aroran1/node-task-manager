@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/aroran1/node-task-manager/issues"
   },
-  "homepage": "https://github.com/aroran1/node-task-manager#readme"
+  "homepage": "https://github.com/aroran1/node-task-manager#readme",
+  "dependencies": {
+    "mongodb": "^3.6.4"
+  }
 }
