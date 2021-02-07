@@ -113,3 +113,18 @@ db.collection('users').findOne({name: 'Jen'}, (error, user) => {
   console.log(user);
 });
 ```
+- Find method finds all themeatched documents and points you to the cursor which allows you to use different opetaions on the data - checkout find method in the api
+```
+  // returns array of documents
+  db.collection('users').find({ age: 27 }).toArray((error, users) => {
+    if(error) {
+      return console.log('Unable to fetch!');
+    }
+    console.log(users);
+  });
+
+  // returns count of all the fount documents
+  db.collection('users').find({ age: 27 }).count((error, count) => {
+    console.log(count);
+  })
+```

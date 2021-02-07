@@ -67,10 +67,38 @@ mongodb.connect(connectionUrl, { useNewUrlParser: true }, (error, client) => {
   // });
 
   // Find document
-  db.collection('users').findOne({name: 'Jen'}, (error, user) => {
-    if(error) {
-      return console.log('Unable to fetch!');
+  // db.collection('users').findOne({ _id: new ObjectID("602032bd1154ba13b7d2a94a") }, (error, user) => {
+  //   if(error) {
+  //     return console.log('Unable to fetch!');
+  //   }
+  //   console.log(user);
+  // });
+
+  // Find method points you to the cursor which allows you to use different opetaions on the data - checkout find method in the api
+  // db.collection('users').find({ age: 27 }).toArray((error, users) => {
+  //   if(error) {
+  //     return console.log('Unable to fetch!');
+  //   }
+  //   console.log(users);
+  // });
+
+  // db.collection('users').find({ age: 27 }).count((error, count) => {
+  //   console.log(count);
+  // })
+
+  // find 1 task with id
+  db.collection('tasks').findOne({ _id: new ObjectID('602032bd1154ba13b7d2a94e')}, (error, task) => {
+    if(error){
+      return console.log('Unable to find task!');
     }
-    console.log(user);
+    console.log(task);
+  });
+
+  // find all in-complete tasks
+  db.collection('tasks').find({ completed: false}).toArray((error, tasks) => {
+    if(error){
+      return console.log('Unable to find tasks!');
+    }
+    console.log(tasks);
   });
 }); 
