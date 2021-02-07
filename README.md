@@ -96,3 +96,20 @@ db.collection('users').insertOne({
   console.log(result.ops); //
 });
 ```
+- `Object ID`
+  - in a sql db, the id increases incrementally starting from 0, 1, 2 but in non sql they are globally unique ids aka GUIDs. They are 12 byte data craeted as below
+    - a 4-byte timestamp value, showing the ObjectId’s creation measured in seconds since the Unix epoch
+    - 5-byte random value
+    - 3-byte incrementing counter
+  - They are useful to fetch a documents with id
+  - To create a specific id `const id = new ObjectID;` and then in object set it as `_id = id`
+
+- To find a single document in the database you can use `findOne` command
+```
+db.collection('users').findOne({name: 'Jen'}, (error, user) => {
+  if(error) {
+    return console.log('Unable to fetch!');
+  }
+  console.log(user);
+});
+```
