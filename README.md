@@ -53,3 +53,22 @@ These are the ways to interact with MongoDB. [https://docs.mongodb.com/drivers/]
 
 
 ### Connecting to MongoDB with node
+- run MongoDB in one terminal or start with `/Users/nidhiarora/mongodb/bin/mongod --dbpath=/Users/nidhiarora/mongodb-data`
+- run `node mongodb.js`
+
+#### Mongo Commands
+- Create a new DB with `const db = client.db(DATABASE_NAME)`
+- Create a collection with `db.collection('users')`
+- Insert a document `insertOne` or `insterMany`
+- Return an callback with insertion action by passing a second argument as `((error, result) => {})`
+```
+db.collection('users').insertOne({
+    name: 'Nidhi',
+    age: 37
+  }, (error, result) => {
+  if (error) {
+    return console.log('Unable to insert user');
+  }
+  console.log(result.ops);
+});
+```
