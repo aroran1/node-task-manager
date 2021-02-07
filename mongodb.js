@@ -18,12 +18,44 @@
   const db = client.db(DATABASE_NAME)
 
   // Run this and test it out in robo 3T to check the uopdate
-  db.collection('users').insertOne({
-    name: 'Nidhi',
-    age: 37
-  }, (error, result) => {
+  // api methods for collection - http://mongodb.github.io/node-mongodb-native/3.6/api/Collection.html
+  
+  // insters a single document
+  // db.collection('users').insertOne({
+  //   name: 'Nidhi',
+  //   age: 37
+  // }, (error, result) => {
+  //   if (error) {
+  //     return console.log('Unable to insert user');
+  //   }
+  //   console.log(result.ops);
+  // });
+
+  // insters many documents
+  db.collection('users').insertMany([
+    {
+      name: "Kia",
+      age: 20
+    },
+    {
+      name: "Jen",
+      age: 27
+    }
+  ], (error, result) => {
     if (error) {
-      return console.log('Unable to insert user');
+      return console.log('Unable to insert users');
+    }
+    console.log(result.ops);
+  })
+
+  // creating a new tasks collection
+  db.collection('tasks').insertMany([
+    { description: "Go shopping", completed: false},
+    { description: "Feed kids", completed: false},
+    { description: "Cook dinner", completed: false}
+  ], (error, result) => {
+    if(error) {
+      return console.log('Unable to insert tasks!');
     }
     console.log(result.ops);
   });

@@ -49,11 +49,34 @@ download it from here [https://robomongo.org/download](https://robomongo.org/dow
 These are the ways to interact with MongoDB. [https://docs.mongodb.com/drivers/](https://docs.mongodb.com/drivers/). Select Node.
 
 - [API reference](http://mongodb.github.io/node-mongodb-native/3.6/api/)
+  - Connect methods - http://mongodb.github.io/node-mongodb-native/3.6/api/MongoClient.html
+  - Collection methods - http://mongodb.github.io/node-mongodb-native/3.6/api/Collection.html
 - Install [npm mongodb](https://www.npmjs.com/package/mongodb) official driver package
 
 
 ### Connecting to MongoDB with node
 - run MongoDB in one terminal or start with `/Users/nidhiarora/mongodb/bin/mongod --dbpath=/Users/nidhiarora/mongodb-data`
+- create `mongodb.js`
+- install `mongodb` npm package
+- the add below to mongodb.js
+```
+const mongodb = require('mongodb');
+// MongoClient will give access to the function necessary to connect to the database so we can perform
+ CRUD operations
+const MongoClient = mongodb.MongoClient;
+const connectionUrl = 'mongodb://127.0.0.1:27017'; // use IP instead of localhost as it slows down the application
+
+
+// useNewUrlParser required to connect correctly useNewUrlParser
+// api methods for collection - http://mongodb.github.io/node-mongodb-native/3.6/api/MongoClient.html
+mongodb.connect(connectionUrl, { useNewUrlParser: true }, (error, client) => {
+  if(error) {
+    return console.log('Unable to connect to databse!');
+  }
+  const db = client.db(DATABASE_NAME);
+  ...
+}
+```
 - run `node mongodb.js`
 
 #### Mongo Commands
@@ -62,6 +85,7 @@ These are the ways to interact with MongoDB. [https://docs.mongodb.com/drivers/]
 - Insert a document `insertOne` or `insterMany`
 - Return an callback with insertion action by passing a second argument as `((error, result) => {})`
 ```
+// api methods for collection - http://mongodb.github.io/node-mongodb-native/3.6/api/Collection.html
 db.collection('users').insertOne({
     name: 'Nidhi',
     age: 37
@@ -69,6 +93,6 @@ db.collection('users').insertOne({
   if (error) {
     return console.log('Unable to insert user');
   }
-  console.log(result.ops);
+  console.log(result.ops); //
 });
 ```
