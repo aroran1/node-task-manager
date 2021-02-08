@@ -82,6 +82,8 @@ mongodb.connect(connectionUrl, { useNewUrlParser: true }, (error, client) => {
 #### Mongo Commands
 - Create a new DB with `const db = client.db(DATABASE_NAME)`
 - Create a collection with `db.collection('users')`
+
+- `Insert`
 - Insert a document `insertOne` or `insterMany`
 - Return an callback with insertion action by passing a second argument as `((error, result) => {})`
 ```
@@ -104,6 +106,7 @@ db.collection('users').insertOne({
   - They are useful to fetch a documents with id
   - To create a specific id `const id = new ObjectID;` and then in object set it as `_id = id`
 
+- `Find`
 - To find a single document in the database you can use `findOne` command
 ```
 db.collection('users').findOne({name: 'Jen'}, (error, user) => {
@@ -113,7 +116,7 @@ db.collection('users').findOne({name: 'Jen'}, (error, user) => {
   console.log(user);
 });
 ```
-- Find method finds all themeatched documents and points you to the cursor which allows you to use different opetaions on the data - checkout find method in the api
+- Find method finds all the matched documents and points you to the cursor which allows you to use different opetaions on the data - checkout find method in the api
 ```
   // returns array of documents
   db.collection('users').find({ age: 27 }).toArray((error, users) => {
@@ -127,4 +130,22 @@ db.collection('users').findOne({name: 'Jen'}, (error, user) => {
   db.collection('users').find({ age: 27 }).count((error, count) => {
     console.log(count);
   })
+```
+-  `Update with promise instead of CB`
+- UpdateOne allows you to update 1 documents with the matched property
+- you can use `$set: { name: 'Meera' }` to update a value
+- Or you can use simething like `$inc: { age: 1 }` to increase that vakue by 1
+```
+  // Update with promise instead of callbacks
+  db.collection('users').updateOne({
+    _id: new ObjectID("6019dd788a4095cd3c31926c")
+  }, {
+    $set: {
+      age: 21
+    }
+  }).then((result) => {
+    console.log(result);
+  }).catch((error) => {
+    console.log(error);
+  });
 ```

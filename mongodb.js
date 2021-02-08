@@ -87,18 +87,31 @@ mongodb.connect(connectionUrl, { useNewUrlParser: true }, (error, client) => {
   // })
 
   // find 1 task with id
-  db.collection('tasks').findOne({ _id: new ObjectID('602032bd1154ba13b7d2a94e')}, (error, task) => {
-    if(error){
-      return console.log('Unable to find task!');
-    }
-    console.log(task);
-  });
+  // db.collection('tasks').findOne({ _id: new ObjectID('602032bd1154ba13b7d2a94e')}, (error, task) => {
+  //   if(error){
+  //     return console.log('Unable to find task!');
+  //   }
+  //   console.log(task);
+  // });
 
-  // find all in-complete tasks
-  db.collection('tasks').find({ completed: false}).toArray((error, tasks) => {
-    if(error){
-      return console.log('Unable to find tasks!');
+  // // find all in-complete tasks
+  // db.collection('tasks').find({ completed: false}).toArray((error, tasks) => {
+  //   if(error){
+  //     return console.log('Unable to find tasks!');
+  //   }
+  //   console.log(tasks);
+  // });
+
+  // Update with promise instead of callbacks
+  db.collection('users').updateOne({
+    _id: new ObjectID("6019dd788a4095cd3c31926c")
+  }, {
+    $set: {
+      age: 21
     }
-    console.log(tasks);
+  }).then((result) => {
+    console.log(result);
+  }).catch((error) => {
+    console.log(error);
   });
 }); 
