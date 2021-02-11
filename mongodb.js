@@ -103,15 +103,32 @@ mongodb.connect(connectionUrl, { useNewUrlParser: true }, (error, client) => {
   // });
 
   // Update with promise instead of callbacks
-  db.collection('users').updateOne({
-    _id: new ObjectID("6019dd788a4095cd3c31926c")
-  }, {
-    $set: {
-      age: 21
-    }
+  // db.collection('users').updateOne({
+  //   _id: new ObjectID("6019dd788a4095cd3c31926c")
+  // }, {
+  //   $set: {
+  //     age: 21
+  //   }
+  // }).then((result) => {
+  //   console.log(result);
+  // }).catch((error) => {
+  //   console.log(error);
+  // });
+
+  // Delete
+  // db.collection('user').deleteMany({
+  //   age: 20
+  // }).then((result) => {
+  //   console.log(result);
+  // }).catch((err) => {
+  //   console.log(err);
+  // });
+
+  db.collection('tasks').deleteOne({
+    _id: new ObjectID('602032bd1154ba13b7d2a94d')
   }).then((result) => {
     console.log(result);
-  }).catch((error) => {
-    console.log(error);
+  }).catch((err) => {
+    console.log(err);
   });
 }); 

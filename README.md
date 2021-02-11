@@ -149,3 +149,23 @@ db.collection('users').findOne({name: 'Jen'}, (error, user) => {
     console.log(error);
   });
 ```
+
+- deleteing properties from the database by `deleteMany` or `deleteOne`
+```
+  db.collection('user').deleteMany({
+    age: 20
+  }).then((result) => {
+    console.log(result);
+  }).catch((err) => {
+    console.log(err);
+  });
+
+
+  db.collection('tasks').deleteOne({
+    _id: new ObjectID('602032bd1154ba13b7d2a94d')
+  }).then((result) => {
+    console.log(result);
+  }).catch((err) => {
+    console.log(err);
+  });
+```
