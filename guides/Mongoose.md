@@ -27,6 +27,7 @@ const User = mongoose.model('User', {
     trim: true, // trims any white space and string specific
     required: true // marks this property as required when saving data
   },
+  // **Terminal Error Output: Error ValidationError: description: Path `description` is required.!**
   age: {
     type: Number,
     default: 0, // passes the default value
@@ -50,8 +51,20 @@ const User = mongoose.model('User', {
         throw new Error('Email is invalid!');
       }
     }
-  }
+  },
   // **Terminal Error Output: Error ValidationError: emai: Path `emai` is required.!**
+
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+    minLength: 7, // length validation
+    validate(value){
+      if(value.toLowerCase().includes('password')) {
+        throw new Error('Password cannot conatins word "password"!');
+      }
+    }
+  }
 });
 
 ```

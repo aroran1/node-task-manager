@@ -38,41 +38,54 @@ const User = mongoose.model('User', {
         throw new Error('Email is invalid!');
       }
     }
+  },
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+    minLength: 7,
+    validate(value){
+      if(value.toLowerCase().includes('password')) {
+        throw new Error('Password cannot conatins word "password"!');
+      }
+    }
   }
 });
 
 // create a new user using the model to pass teh correct type and pass the data 
-const user1 = new User({
-  name: '  CheekyMonkey  ',
-  email: '   cheeky@monkey.com'
-});
-
-// To save to database using CRUD operations
-user1.save().then(() => {
-  console.log(user1);
-}).catch((error) => {
-  console.log(`Error ${error}!`);
-})
-
-// Model for Tasks
-// const Task = mongoose.model('Tasks', {
-//   description: {
-//     type: String
-//   },
-//   completed: {
-//     type: Boolean
-//   }
+// const user1 = new User({
+//   name: '  Pizza boy  ',
+//   email: '   pizza@boy.com',
+//   password: 'phone089'
 // });
 
-// create a new instance
-// const task1 = new Task({
-//   description: 'Meet with boss',
-//   completed: false
-// });
-
-// save
-// task1.save().then(() => {
-//   console.log(task1);
+// // To save to database using CRUD operations
+// user1.save().then(() => {
+//   console.log(user1);
 // }).catch((error) => {
 //   console.log(`Error ${error}!`);
 // })
+
+// Model for Tasks
+const Task = mongoose.model('Tasks', {
+  description: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  completed: {
+    type: Boolean,
+    default: false
+  }
+});
+
+// create a new instance
+const task1 = new Task({
+});
+
+// save
+task1.save().then(() => {
+  console.log(task1);
+}).catch((error) => {
+  console.log(`Error ${error}!`);
+})
