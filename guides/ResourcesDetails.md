@@ -4,13 +4,13 @@
 The folder structure in the src folder is tidy-up as per production build, statring from `/src/index.js` as express file.
 
 - **EXPRESS**
-  - /src/index.js - express setting up port for local and heroku
+  - `/src/index.js` - express setting up port for local and heroku
   - setting up start command in package.json as 
   ```
     "start": "node src/index.js", // for heroku to start the application
     "dev": "nodemon src/index.js", // for local environment only to start the application
   ```
-  - Create http methods to create a user as below
+  - **Create http methods** to create a user as below
     ```
       app.post('/users', (req, res) => {
         res.send('testing response!');

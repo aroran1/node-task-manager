@@ -78,25 +78,25 @@ mongodb.connect(connectionUrl, { useNewUrlParser: true }, (error, client) => {
 - run `node mongodb.js`
 
 ### Mongo Commands
-- Create a new DB with `const db = client.db(DATABASE_NAME)`
-- Create a collection with `db.collection('users')`
+- **Create a new DB** with `const db = client.db(DATABASE_NAME)`
+- **Create a collection** with `db.collection('users')`
+- **Insert item in a collection**
+  - Insert a document `insertOne` or `insterMany`
+  - Return an callback with insertion action by passing a second argument as `((error, result) => {})`
+    ```
+    // api methods for collection - http://mongodb.github.io/node-mongodb-native/3.6/api/Collection.html
+    db.collection('users').insertOne({
+        name: 'Nidhi',
+        age: 37
+      }, (error, result) => {
+      if (error) {
+        return console.log('Unable to insert user');
+      }
+      console.log(result.ops); //
+    });
+    ```
 
-- `Insert`
-- Insert a document `insertOne` or `insterMany`
-- Return an callback with insertion action by passing a second argument as `((error, result) => {})`
-```
-// api methods for collection - http://mongodb.github.io/node-mongodb-native/3.6/api/Collection.html
-db.collection('users').insertOne({
-    name: 'Nidhi',
-    age: 37
-  }, (error, result) => {
-  if (error) {
-    return console.log('Unable to insert user');
-  }
-  console.log(result.ops); //
-});
-```
-- `Object ID`
+- **Understanding Object ID**
   - in a sql db, the id increases incrementally starting from 0, 1, 2 but in non sql they are globally unique ids aka GUIDs. They are 12 byte data craeted as below
     - a 4-byte timestamp value, showing the ObjectId’s creation measured in seconds since the Unix epoch
     - 5-byte random value
@@ -104,69 +104,71 @@ db.collection('users').insertOne({
   - They are useful to fetch a documents with id
   - To create a specific id `const id = new ObjectID;` and then in object set it as `_id = id`
 
-- `Find`
-- To find a single document in the database you can use `findOne` command
-```
-db.collection('users').findOne({name: 'Jen'}, (error, user) => {
-  if(error) {
-    return console.log('Unable to fetch!');
-  }
-  console.log(user);
-});
-```
-- Find method finds all the matched documents and points you to the cursor which allows you to use different opetaions on the data - checkout find method in the api
-```
-  // returns array of documents
-  db.collection('users').find({ age: 27 }).toArray((error, users) => {
-    if(error) {
-      return console.log('Unable to fetch!');
-    }
-    console.log(users);
-  });
+- **Finding item in a collection**
+  - To find a single document in the database you can use `findOne` command
+    ```
+    db.collection('users').findOne({name: 'Jen'}, (error, user) => {
+      if(error) {
+        return console.log('Unable to fetch!');
+      }
+      console.log(user);
+    });
+    ```
+  - Find method finds all the matched documents and points you to the cursor which allows you to use different opetaions on the data - checkout find method in the api
+    ```
+      // returns array of documents
+      db.collection('users').find({ age: 27 }).toArray((error, users) => {
+        if(error) {
+          return console.log('Unable to fetch!');
+        }
+        console.log(users);
+      });
 
-  // returns count of all the fount documents
-  db.collection('users').find({ age: 27 }).count((error, count) => {
-    console.log(count);
-  })
-```
--  `Update with promise instead of CB`
-- UpdateOne allows you to update 1 documents with the matched property
-- you can use `$set: { name: 'Meera' }` to update a value
-- Or you can use simething like `$inc: { age: 1 }` to increase that vakue by 1
-```
-  // Update with promise instead of callbacks
-  db.collection('users').updateOne({
-    _id: new ObjectID("6019dd788a4095cd3c31926c")
-  }, {
-    $set: {
-      age: 21
-    }
-  }).then((result) => {
-    console.log(result);
-  }).catch((error) => {
-    console.log(error);
-  });
-```
+      // returns count of all the fount documents
+      db.collection('users').find({ age: 27 }).count((error, count) => {
+        console.log(count);
+      })
+    ```
 
-- deleteing properties from the database by `deleteMany` or `deleteOne`
-```
-  db.collection('user').deleteMany({
-    age: 20
-  }).then((result) => {
-    console.log(result);
-  }).catch((err) => {
-    console.log(err);
-  });
+- **Update item in a collection with promise instead of CB (callback)**
+  - UpdateOne allows you to update 1 documents with the matched property
+  - you can use `$set: { name: 'Meera' }` to update a value
+  - Or you can use simething like `$inc: { age: 1 }` to increase that vakue by 1
+  ```
+    // Update with promise instead of callbacks
+    db.collection('users').updateOne({
+      _id: new ObjectID("6019dd788a4095cd3c31926c")
+    }, {
+      $set: {
+        age: 21
+      }
+    }).then((result) => {
+      console.log(result);
+    }).catch((error) => {
+      console.log(error);
+    });
+  ```
+
+- **Delete item in a collection**
+  - deleteing properties from the database by `deleteMany` or `deleteOne`
+    ```
+      db.collection('user').deleteMany({
+        age: 20
+      }).then((result) => {
+        console.log(result);
+      }).catch((err) => {
+        console.log(err);
+      });
 
 
-  db.collection('tasks').deleteOne({
-    _id: new ObjectID('602032bd1154ba13b7d2a94d')
-  }).then((result) => {
-    console.log(result);
-  }).catch((err) => {
-    console.log(err);
-  });
-```
+      db.collection('tasks').deleteOne({
+        _id: new ObjectID('602032bd1154ba13b7d2a94d')
+      }).then((result) => {
+        console.log(result);
+      }).catch((err) => {
+        console.log(err);
+      });
+    ```
 
 You can drop the database or a collection by using .drop() method or by right click on the 3T UI and selecting drop.
 
