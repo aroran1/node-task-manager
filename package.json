@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,8 +19,10 @@
   },
   "homepage": "https://github.com/aroran1/node-task-manager#readme",
   "dependencies": {
+    "express": "^4.17.1",
     "mongodb": "^3.6.4",
     "mongoose": "^5.11.15",
+    "nodemon": "^2.0.7",
     "validator": "^13.5.2"
   }
 }
