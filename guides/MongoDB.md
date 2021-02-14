@@ -1,9 +1,7 @@
-# node-task-manager
-
-## MongoDB
+# MongoDB
 MongoDB is a free no-sql (not only structure query language) database.
 
-### Mongo Structure
+## Mongo Structure
 ```
 [
   {
@@ -13,7 +11,7 @@ MongoDB is a free no-sql (not only structure query language) database.
 ] // Collection (same as sql Table)
 ```
 
-### Mongo set-up
+## Mongo set-up
 
 Download MongoDB server from [https://www.mongodb.com/try/download/community](https://www.mongodb.com/try/download/community) and select
   - Latest version
@@ -31,7 +29,7 @@ nidhiarora@Nidhis-MacBook-Pro ~ % /Users/nidhiarora/mongodb/bin/mongod --dbpath=
 ```
 You will see some logs running and some port number where mondo is running. Keep this running in a terminal to make sure you are connected with db.
 
-### Install Robo 3T - mongodb GUI
+## Install Robo 3T - mongodb GUI
 download it from here [https://robomongo.org/download](https://robomongo.org/download) and install it in your applications.
 
 - select create to create a new connection with local mongodb
@@ -45,7 +43,7 @@ download it from here [https://robomongo.org/download](https://robomongo.org/dow
 - Right click pon the database and select `open new shell`
 - type `db.version` and press green play button
 
-### MongoDB Drivers
+## MongoDB Drivers
 These are the ways to interact with MongoDB. [https://docs.mongodb.com/drivers/](https://docs.mongodb.com/drivers/). Select Node.
 
 - [API reference](http://mongodb.github.io/node-mongodb-native/3.6/api/)
@@ -54,7 +52,7 @@ These are the ways to interact with MongoDB. [https://docs.mongodb.com/drivers/]
 - Install [npm mongodb](https://www.npmjs.com/package/mongodb) official driver package
 
 
-### Connecting to MongoDB with node
+## Connecting to MongoDB with node
 - run MongoDB in one terminal or start with `/Users/nidhiarora/mongodb/bin/mongod --dbpath=/Users/nidhiarora/mongodb-data`
 - create `mongodb.js`
 - install `mongodb` npm package
@@ -79,7 +77,7 @@ mongodb.connect(connectionUrl, { useNewUrlParser: true }, (error, client) => {
 ```
 - run `node mongodb.js`
 
-#### Mongo Commands
+### Mongo Commands
 - Create a new DB with `const db = client.db(DATABASE_NAME)`
 - Create a collection with `db.collection('users')`
 
@@ -172,7 +170,7 @@ db.collection('users').findOne({name: 'Jen'}, (error, user) => {
 
 You can drop the database or a collection by using .drop() method or by right click on the 3T UI and selecting drop.
 
-### Mongo Starting Errror
+## Mongo Starting Errror
 If you get below error when trying to start-up mongodb, meaning the mongo port is already in use.
 ```
 "msg":"Error setting up listener","attr":{"error":{"code":9001,"codeName":"SocketException","errmsg":"Address already in use"}}}

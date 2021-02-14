@@ -1,12 +1,10 @@
-# node-task-manager
-
-## Mongoose
+# Mongoose
 
 Mongoose uses the MongoDB's low level apis behind the scene but on the framework leve it makes thing easier for the users to implement, type checks or authencation etc.
 
 [Mongoose Schema](https://mongoosejs.com/docs/guide.html)
 
-### Connecting to mongoDB via Mongoose
+## Connecting to mongoDB via Mongoose
 ```
 // task-manager-api creates the specified database
 mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api', {
@@ -15,7 +13,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api', {
 })
 ```
 
-### Create collection model to check the data type and validation
+## Create collection model to check the data type and validation
 Note: Mongoose will tak ethe model name `User` in this case, converts it to a lower case and polarise it and use it as a collection name in the db. So in the db you'll see the collection named as `user` instead of capital `User`.
 [Mongoose default validation](https://mongoosejs.com/docs/validation.html)
 You can use npm package for validation as well [npm validator](https://www.npmjs.com/package/validator).
@@ -36,7 +34,7 @@ const User = mongoose.model('User', {
       if(value < 0) {
         throw new Error('Age must be a positive number!');
       }
-    }
+    } 
   },
   // **Terminal Error Output: Error ValidationError: age: Age must be a positive number!!**
 
@@ -69,7 +67,7 @@ const User = mongoose.model('User', {
 
 ```
 
-### Create data locally with new User model instance
+## Create data locally with new User model instance
 ```
 const user1 = new User({
   name: 'Andrew',
@@ -77,7 +75,7 @@ const user1 = new User({
 });
 ```
 
-### Save the data to databe using crud operation as .save
+## Save the data to databe using crud operation as .save
 ```
 // To save to database using CRUD operations
 user1.delete().then(() => {
@@ -87,11 +85,11 @@ user1.delete().then(() => {
 })
 ```
 
-### Terminal Output:
+## Terminal Output:
 ```
 { _id: 60253b9742f971a07f44bb8e, name: 'Andrew', age: 23, __v: 0 }
 ```
-### Terminal Validation error
+## Terminal Validation error
 ```
 Error ValidationError: age: Cast to Number failed for value "dfsd" at path "age"!
 ```
