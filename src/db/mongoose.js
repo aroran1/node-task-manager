@@ -27,8 +27,31 @@ const user1 = new User({
 });
 
 // To save to database using CRUD operations
-user1.save().then(() => {
-  console.log(user1);
+// user1.save().then(() => {
+//   console.log(user1);
+// }).catch((error) => {
+//   console.log(`Error ${error}!`);
+// })
+
+// Model for Tasks
+const Task = mongoose.model('Tasks', {
+  description: {
+    type: String
+  },
+  completed: {
+    type: Boolean
+  }
+});
+
+// create a new instance
+const task1 = new Task({
+  description: 'Meet with boss',
+  completed: false
+});
+
+// save
+task1.save().then(() => {
+  console.log(task1);
 }).catch((error) => {
   console.log(`Error ${error}!`);
 })

@@ -171,3 +171,15 @@ db.collection('users').findOne({name: 'Jen'}, (error, user) => {
 ```
 
 You can drop the database or a collection by using .drop() method or by right click on the 3T UI and selecting drop.
+
+### Mongo Starting Errror
+If you get below error when trying to start-up mongodb, meaning the mongo port is already in use.
+```
+"msg":"Error setting up listener","attr":{"error":{"code":9001,"codeName":"SocketException","errmsg":"Address already in use"}}}
+```
+resolve the error with below steps:
+```
+1. sudo lsof -iTCP -sTCP:LISTEN -n -P
+2. sudo kill <mongo_command_pid>
+3. restart mongodb with /Users/nidhiarora/mongodb/bin/mongod --dbpath=/Users/nidhiarora/mongodb-data
+```
