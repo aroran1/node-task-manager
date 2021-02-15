@@ -3,7 +3,7 @@
 ## Creating Resources
 The folder structure in the src folder is tidy-up as per production build, statring from `/src/index.js` as express file.
 
-- **EXPRESS**
+### EXPRESS - accessing data from postman
   - `/src/index.js` - express setting up port for local and heroku
   - setting up start command in package.json as 
   ```
@@ -37,3 +37,68 @@ The folder structure in the src folder is tidy-up as per production build, statr
       });
       ```
       the data is now accessible via express api path request body and we now need to connect that with mongoose method to post this to the database.
+
+
+### Models set-up
+  - Create a new folder `/src/models`
+  - Create user and task model files and plug their relevant data model in the files . these models should sit in their own folders.
+  ```
+    const mongoose = require('mongoose');
+    const validator = require('validator');
+
+    // create a task collection model in the db
+    const Task = mongoose.model('Task', {
+      description: {
+        type: String,
+        require: true,
+        trim: true
+      },
+      completed: {
+        type: Boolean,
+        default: false
+      }
+    });
+
+    module.exports = Task;
+  ```
+  - add `module.exports = User` and import the models in the `/src/index.js` and same for tasks
+
+
+### Mongoose clean-up
+  - clean up `/src/db/mongoose.js` file from any model, local data or save methods as this file should only be responsible for connecting with db.
+  - Also remove any unnecessary requires from theis file.
+  ```
+    const mongoose = require('mongoose');
+    mongoose.connect('mongodb://localhost:27017/task-manager-api', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+  ```
+
+### Express - posting request to db
+  - Create a new user with the parsed Json object with `const user = new User(req.body);`
+  - Then use `.save()` method to save the data in the db
+  - Attach `.then()` method to return data object and `.catch()` method to log error, handling the http promise requests appropriately.
+  ```
+  // Create a new user with HTTP POST method to '/users' path
+  app.post('/users', (req, res) => {
+    const user = new User(req.body);
+
+    user.save().then(() => {
+      res.send(user);
+    }).catch((err) => {
+      console.log(`Error ${error}!`);
+    });
+  }); 
+  ```
+  - Run the above postman call with validated body data as json to `localhost:3000/users` and you will get below response whih verifies its working
+  ```
+    {
+      "age": 0,
+      "_id": "6029b9518d32a2d89b1fab94",
+      "name": "Tina Mead",
+      "email": "tintin@mead.com",
+      "__v": 0
+    }
+  ```
+  - Also verify your work with 3T Robo db GUI
