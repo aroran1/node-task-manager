@@ -102,3 +102,22 @@ The folder structure in the src folder is tidy-up as per production build, statr
     }
   ```
   - Also verify your work with 3T Robo db GUI
+
+### Express - error handling and status update
+  - to log if there is an error if the parse data is invalid for example invalid password length
+  - the mongoose validating will kick in and we need to return that back as pur response with correct response. See full list of [http response statuses](https://httpstatuses.com/).
+  - set the `res.status(400)` before `res.send(err)` or chain both methods
+  ```
+  app.post('/users', (req, res) => {
+    const user = new User(req.body);
+
+    user.save().then(() => {
+      res.send(user);
+    }).catch((e) => {
+      <!-- res.status(400);
+      res.send(err); -->
+      res.status(400).send(e)
+    });
+  }); 
+  ```
+  - test it in postman to see the status code updating
