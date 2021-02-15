@@ -157,3 +157,56 @@ app.post('/tasks', (req, res) => {
 
 POSTMAN OUTPUT: {"completed":false,"_id":"6029c524347259db4895aee7","description":"Finish Node course","__v":0}
 ```
+
+
+### Express - get all users
+- use path as `/users`
+- to get all users use `.find({})` method with empty object passed in
+- set success status as 200
+- set errro status as 500
+```
+// Read all users with HTTP GET method to '/users' path
+app.get('/users', (req, res) => {
+  User.find({}).then((users) => {
+    res.status(200).send(users)
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
+});
+
+POSTMAN OUTPUT returns an array: [{"age":23,"_id":"602550d5c666d8a3c47777a3","name":"Andrew","__v":0},{"age":0,"_id":"60295fe90920fec336a1da2a","name":"Mike","__v":0},{"age":0,"_id":"602963e5757693c526633db3","name":"CheekyMonkey","email":"cheeky@monkey.com","__v":0},{"age":0,"_id":"602968230edef6c707fc9701","name":"Pizza boy","email":"pizza@boy.com","password":"phone089","__v":0},{"age":0,"_id":"6029b9518d32a2d89b1fab94","name":"Tina Mead","email":"tintin@mead.com","__v":0}]
+```
+
+### Express - get a particular users by id
+- to access the changing id of the individual user item express provides us with route paramerters. These are parts of the url taht are used to capture dynamic values which looks like `/users/:id` (id in this case but could be any value of the data object). Route handler reads it as `/users/:id` meaning `/user/something` and something is mapped withe the values matched in the db with the passed property name.
+- this `:id` value is accessible via `req.params`. Test by setting a console and hitting `localhost:3000/users/sfsjkdsk`
+```
+app.get('/users/:id', (req, res) => {
+  console.log(req.params);
+});
+
+Terminal OUTPUT: {id: 'sfsjkdsk'}
+```
+- to find item you cna use either `findOne` or `findById`. `findOne` will return matched value with any matched data model property. `findById` will return data matched with the passed ID.
+- No match is also a success as there is nothing to match so this need to handles in the code with `if(!user)` and return 404
+```
+// Read a users with matched :id with HTTP GET method to '/users/:id' path
+app.get('/users/:id', (req, res) => {
+  // console.log(req.params);
+  const _id = req.params.id;
+
+  User.findById(_id).then(user => {
+    if(!user) {
+      return res.status(404).send()
+    }
+
+    res.status(200).send(user)
+  }).catch(e => {
+    
+    res.status(500).send(e);
+  });
+});
+
+POSTMAN OUTPUT with teh correctly passed id: {"age":0,"_id":"6029b9518d32a2d89b1fab94","name":"Tina Mead","email":"tintin@mead.com","__v":0}
+```
+- Do same for tasks
