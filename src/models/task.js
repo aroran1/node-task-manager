@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
 
 // create a task collection model in the db
 const Task = mongoose.model('Task', {
   description: {
     type: String,
-    require: true,
+    required: true,
     trim: true
   },
   completed: {

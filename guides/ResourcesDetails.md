@@ -103,10 +103,9 @@ The folder structure in the src folder is tidy-up as per production build, statr
   ```
   - Also verify your work with 3T Robo db GUI
 
-### Express - error handling and status update
+### Express - error handling
   - to log if there is an error if the parse data is invalid for example invalid password length
-  - the mongoose validating will kick in and we need to return that back as pur response with correct response. See full list of [http response statuses](https://httpstatuses.com/).
-  - set the `res.status(400)` before `res.send(err)` or chain both methods
+  - the mongoose validating will kick in and we need to return the error back as our response with correct stats. See full list of [http response statuses](https://httpstatuses.com/).
   ```
   app.post('/users', (req, res) => {
     const user = new User(req.body);
@@ -114,10 +113,47 @@ The folder structure in the src folder is tidy-up as per production build, statr
     user.save().then(() => {
       res.send(user);
     }).catch((e) => {
-      <!-- res.status(400);
-      res.send(err); -->
+      <!-- res.status(400); -->
+      res.send(e);
+    });
+  }); 
+  ```
+  - test it in postman to see the status code updating
+
+
+### Express - status update
+  - based on mongoose CURD operations response we need to update the response status with the response amd error handling. 
+  - If you don't manually set the status Express assumes everything went well and returns 200.
+    - Even when thing go well its best practices to set the most appropriate status code for example created should be set as 201 instaed of just 200
+    - See full list of [http response statuses](https://httpstatuses.com/).
+  - create the `res.status(201)` before `res.send(user)` or chain both methods as `res.status(201).send(user)`
+  - set the `res.status(400)` before `res.send(err)` or chain both methods as `res.status(400).send(e)`
+  ```
+  app.post('/users', (req, res) => {
+    const user = new User(req.body);
+
+    user.save().then(() => {
+      res.status(201).send(user)
+    }).catch((e) => {
       res.status(400).send(e)
     });
   }); 
   ```
   - test it in postman to see the status code updating
+
+
+### Express - setup tasks post methods to '/tasks' and test it via postman
+```
+// Create a new task with HTTP POST method to '/tasks' path
+app.post('/tasks', (req, res) => {
+  const task = new Task(req.body);
+
+  task.save().then(() => {
+    res.send(task);
+  }).catch(e => {
+    res.status(400).send(e);
+  })
+});
+
+POSTMAN OUTPUT: {"completed":false,"_id":"6029c524347259db4895aee7","description":"Finish Node course","__v":0}
+```
