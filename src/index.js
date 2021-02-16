@@ -52,6 +52,7 @@ app.get('/users/:id', async (req, res) => {
   }
 });
 
+// Update user details
 app.patch('/users/:id', async (req, res) => {
   // check if the patch operation property is allowed
   const updates = Object.keys(req.body); // operation property
@@ -114,6 +115,29 @@ app.get('/tasks/:id', async (req, res) => {
     res.status(500).send(e);
   }
 });
+
+// update task details
+app.patch('/tasks/:id', async (req, res) => {
+  const updates = Object.keys(req.body);
+  const allowedOperations = ['description', 'completed'];
+  const isValidOperation = updates.every(update => allowedOperations.includes(update));
+
+  if(!isValidOperation) {
+    return res.status(404).send({ error: 'Invalid Operation!' });
+  }
+
+  try {
+    const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true});
+
+    if(!task) {
+      return res.status(404).send();
+    }
+    res.send(task);
+
+  } catch (e) {
+    res.status(400).send();
+  }
+})
 
 app.listen(port, () => {
   console.log(`Server is up on port ${port}!`);
