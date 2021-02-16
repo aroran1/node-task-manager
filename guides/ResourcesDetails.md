@@ -210,3 +210,30 @@ app.get('/users/:id', (req, res) => {
 POSTMAN OUTPUT with teh correctly passed id: {"age":0,"_id":"6029b9518d32a2d89b1fab94","name":"Tina Mead","email":"tintin@mead.com","__v":0}
 ```
 - Do same for tasks
+
+### Express - converting resource methods to async/await
+- async/await methods always returns promise by default so no need to use .then().catch() (which also return promise) to catch if the promise is resolved or rejected. This can be done by try n catch.
+```
+// Previous promise approach
+app.post('/users', (req, res) => {
+  const user = new User(req.body);
+  user.save().then(() => {
+    res.status(201).send(user)
+  }).catch(e => {
+    res.status(400).send(e);
+  });
+});
+
+// new async/await approach
+app.post('/users', async (req, res) => {
+  const user = new User(req.body);
+
+  try {
+    await user.save();
+    res.status(201).send(user)
+  } catch(e) {
+    res.status(400).send(e);
+  }
+});
+``` 
+- make the changes and test this by postman
