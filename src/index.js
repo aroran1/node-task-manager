@@ -5,16 +5,12 @@ require('./db/mongoose');
 // gets the models
 const User = require('./models/user');
 const Task = require('./models/task');
-const { request } = require('express');
+const userRouter = require('./router/user');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const router = new express.Router();
-router.get('/test', (req, res) => {
-  res.send('Test router is set');
-});
-app.use(router);
+app.use(userRouter);
 
 // makes the parsed json accessible as an object
 app.use(express.json());
