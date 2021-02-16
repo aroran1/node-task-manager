@@ -7,7 +7,8 @@ A node project as a task-manager to create mongodb and apis.
 - [MongoDB](./guides/MongoDB.md)
 - [Mongooose](./guides/Mongoose.md)
 - [REST API](./guides/REST.md)
-- [App Resources Details](./guides/ResourcesDetails.md)
+- [App Resources and routing](./guides/ResourcesDetails.md)
+- [Authentication and Security](./guides/AuthenticationSecurity.md)
 
 
 ### Tutorial sepcific trial files
