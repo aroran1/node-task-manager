@@ -64,4 +64,13 @@ userSchema.pre('save, async function(next) {
 <em>Note: next need to be called at the end of the middleware method to let mongoose know that the function has run. It you don't run next it'll hang forever and the event will never take place.</em>
 ```
 - run it locally and create a new user in postman and notice the message `Just before saving!` only works for save via create but not for update as `findByIdAndUpdate` method bypass the middleware so we need to breakdown findByIdAndUpdate into multipule steps with save. 
+```
+// replacing findByIdAndUpdate
+const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true})
+
+// with 3 step - find, update and save manually to trigger the middleware pre save event
+const user = User.findById(req.params.id);
+updates.forEach( update => user[update] = req.body[update]);
+await (await user).save();
+```
 
