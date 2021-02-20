@@ -74,3 +74,72 @@ updates.forEach( update => user[update] = req.body[update]);
 await (await user).save();
 ```
 
+### User Login
+- creating a new route to '/user/login'
+  - finding the right user by creating a custom method findByCredentials in the user model file
+  ```
+    // /router/user.js
+    router.post('/users/login', async(req, res) => {
+      try {
+        // creating a custom method findByCredentials
+        // this can only be done if you use schema instead of passing the object
+        const user = await User.findByCredentials(req.body.email, req.body.password);
+        res.send(user);
+      } catch(e) {
+        res.status(400).send(e);
+      }
+    });
+  ```
+  - this can only be done if you use schema instead of passing the object directly in the model
+  ```
+    // /models/user.js
+    // custom method to find user by credentials for login
+    userSchema.statics.findByCredentials = async (email, password) => {
+      const user = await User.findOne({ email });
+
+      if(!user) {
+        throw new Error('Unable to login');
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if(!isMatch) {
+        throw new Error('Unable to login');
+      }
+
+      return user;
+    }
+  ```
+  - for login error handling you must keep it simple and consistent to 1 error like `Unable to login` to avoid any hacker trying to login and giving them help unconsciously.
+  - While logging in or even craeting a user account you need to make sure that its a unique credentials and not duplicated. To achieve this you can pass a mongoose model helper `unique: true,` to email as to make sure each email is unique.
+    - this only works if set-up at the beginning of the craetion of the database and will NOT work if its set afterwards. So in this case we need to flush the db and start again.
+    ```
+      email: {
+        type: String,
+        require: true,
+        unique: true,
+        trim: true,
+        lowercase: true,
+        validate(val) {
+          if (!validator.isEmail(val)) {
+            throw new Error('Email is invalid!');
+          }
+        }
+      },
+
+      // duplicate key error via postman
+      {
+        "driver": true,
+        "name": "MongoError",
+        "index": 0,
+        "code": 11000,
+        "keyPattern": {
+            "email": 1
+        },
+        "keyValue": {
+            "email": "reem@seed.com"
+        }
+      }
+    ```
+  - Once set drop the db and add a new user from postman and test out `/user/login` route with post.
+

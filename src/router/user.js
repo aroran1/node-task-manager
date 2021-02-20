@@ -16,6 +16,17 @@ router.post('/users', async (req, res) => {
   }
 });
 
+router.post('/users/login', async(req, res) => {
+  try {
+    // creating a custom method findByCredentials
+    // this can only be done if you use schema instead of passing the object
+    const user = await User.findByCredentials(req.body.email, req.body.password);
+    res.send(user);
+  } catch(e) {
+    res.status(400).send(e);
+  }
+});
+
 // Read all users with HTTP GET method to '/users' path
 router.get('/users', async (req, res) => {
   try {
