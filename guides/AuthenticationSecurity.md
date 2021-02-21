@@ -290,4 +290,5 @@ Here we will using **[JWT (JSON Web Tokens)](https://www.npmjs.com/package/jsonw
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDMxOWMxYjdjM2ZjZTgyYWUxYTRlNGYiLCJpYXQiOjE2MTM4NzE2NTR9.zx75ZtrPzVrboMcZpAWIwyF2qpXUChRjbX2ZlG-STWE"
       }
     ```
+  - add same functionality for craete user path as well
 
