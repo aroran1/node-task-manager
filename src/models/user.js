@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -39,9 +40,26 @@ const userSchema = new mongoose.Schema({
         throw new Error('Password cannot conatins word "password"!');
       }
     }
-  }
+  },
+  tokens: [{ // tokens will be an array of object
+    token: {
+      type: String,
+      require: true
+    }
+  }]
 });
 
+// methods are available on the instances of that collection (aka instance methods)
+// need this binding so don't use arrow function
+userSchema.methods.generateAuthToken = async function() {
+  const user = this;
+  const token = jwt.sign({ _id: user._id.toString() }, 'thisismynodecourse' );
+  user.tokens = user.tokens.concat({ token });
+  user.save();
+  return token;
+}
+
+// statics are available on the models / collections (aka model methods)
 // custom method to find user by credentials for login
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });

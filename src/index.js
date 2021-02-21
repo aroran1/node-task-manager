@@ -60,7 +60,7 @@ const myTokenTest = async() => {
   // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjNkZmZkaiIsImlhdCI6MTYxMzg2OTE2MywiZXhwIjoxNjEzODcyNzYzfQ.sI3cM6YmPNue8mLOuheadNr3UikcFvCFcTCkbKWRVeM
 
   // verify method accepts 2 params, generated token with the secret message
-  const data = jwt.verify(token, 'ilovepotatoeschipswithcokedd');
+  const data = jwt.verify(token, 'ilovepotatoeschipswithcoke');
   console.log(data);
   // terminal output - success
   // { _id: '123dffdj', iat: 1613869291, exp: 1613872891 }

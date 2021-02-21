@@ -192,7 +192,7 @@ Here we will using **[JWT (JSON Web Tokens)](https://www.npmjs.com/package/jsonw
     // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjNkZmZkaiIsImlhdCI6MTYxMzg2OTE2MywiZXhwIjoxNjEzODcyNzYzfQ.sI3cM6YmPNue8mLOuheadNr3UikcFvCFcTCkbKWRVeM
 
     // verify method accepts 2 params, generated token with the secret message
-    const data = jwt.verify(token, 'ilovepotatoeschipswithcokedd');
+    const data = jwt.verify(token, 'ilovepotatoeschipswithcoke');
     console.log(data);
     // terminal output - success
     // { _id: '123dffdj', iat: 1613869291, exp: 1613872891 }
@@ -203,4 +203,91 @@ Here we will using **[JWT (JSON Web Tokens)](https://www.npmjs.com/package/jsonw
 
   myTokenTest()
 ```
+
+- Creating an account or login both should generate the JWT and send it back to users.
+  - not to duplicate the method twice it'll sit outside these routes in the model file and will be used in the relative paths in router
+  - create generateAuthToken method in user model file which generates and returns the token
+  ```
+    // methods are available on the instances of that collection (aka instance methods)
+    // need this binding so don't use arrow function
+    userSchema.methods.generateAuthToken = async function() {
+      const user = this;
+      const token = jwt.sign({ _id: user._id.toString() }, 'thisismynodecourse' );
+      return token;
+    }
+  ```
+  - return the generated token to client from user router `/user/login` path
+  ```
+    router.post('/users/login', async(req, res) => {
+      try {
+        // creating a custom method findByCredentials
+        // this can only be done if you use schema instead of passing the object
+        const user = await User.findByCredentials(req.body.email, req.body.password);
+
+        // generate token
+        // make sure you are running the generateAuthToken method on the user instance created above with user cont
+        // and not on the whole collection as it need to be unique for each user
+        const token = await user.generateAuthToken();
+        res.send({ user, token });
+      } catch(e) {
+        res.status(400).send(e);
+      }
+    });
+  ```
+  - Postman `localhost:3000/user/login` test output
+  ```
+    {
+      "user": {
+          "age": 20,
+          "_id": "60319c1b7c3fce82ae1a4e4f",
+          "name": "Reema Seed",
+          "email": "reem@seed.com",
+          "password": "$2a$08$jv0NKxuJAUt/gXKGz9GfA./js5N7f6WQZr7k2gHSaESJ.ozdSbJDG",
+          "__v": 0
+      },
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDMxOWMxYjdjM2ZjZTgyYWUxYTRlNGYiLCJpYXQiOjE2MTM4NzExMjB9.azLAXPFPtJ-o8b5DnokAimBTxvY5w7wpfiYKNsBXrbA"
+    }
+  ```
+  - this generated token need to be tracked in the server code so user can invalidate in and logout without any implications. You can do this by below:
+    - update the model with additional tokens array property
+    ```
+      tokens: [{ // tokens will be an array of object
+        token: {
+          type: String,
+          require: true
+        }
+      }]
+    ```
+    - save the generated token to the user model
+    ```
+      // methods are available on the instances of that collection (aka instance methods)
+      // need this binding so don't use arrow function
+      userSchema.methods.generateAuthToken = async function() {
+        const user = this;
+        const token = jwt.sign({ _id: user._id.toString() }, 'thisismynodecourse' );
+        user.tokens = user.tokens.concat({ token });
+        user.save();
+        return token;
+      }
+    ```
+    - Postman output
+    ```
+      {
+        "user": {
+            "age": 20,
+            "_id": "60319c1b7c3fce82ae1a4e4f",
+            "name": "Reema Seed",
+            "email": "reem@seed.com",
+            "password": "$2a$08$jv0NKxuJAUt/gXKGz9GfA./js5N7f6WQZr7k2gHSaESJ.ozdSbJDG",
+            "__v": 0,
+            "tokens": [
+                {
+                    "_id": "6031ba2665ba0e89b0161286",
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDMxOWMxYjdjM2ZjZTgyYWUxYTRlNGYiLCJpYXQiOjE2MTM4NzE2NTR9.zx75ZtrPzVrboMcZpAWIwyF2qpXUChRjbX2ZlG-STWE"
+                }
+            ]
+        },
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDMxOWMxYjdjM2ZjZTgyYWUxYTRlNGYiLCJpYXQiOjE2MTM4NzE2NTR9.zx75ZtrPzVrboMcZpAWIwyF2qpXUChRjbX2ZlG-STWE"
+      }
+    ```
 

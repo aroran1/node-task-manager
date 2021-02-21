@@ -21,7 +21,12 @@ router.post('/users/login', async(req, res) => {
     // creating a custom method findByCredentials
     // this can only be done if you use schema instead of passing the object
     const user = await User.findByCredentials(req.body.email, req.body.password);
-    res.send(user);
+
+    // generate token
+    // make sure you are running the generateAuthToken method on the user instance created above with user cont
+    // and not on the whole collection as it need to be unique for each user
+    const token = await user.generateAuthToken();
+    res.send({ user, token });
   } catch(e) {
     res.status(400).send(e);
   }
