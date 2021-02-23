@@ -21,3 +21,6 @@ The initial api / core learnings for mongoDB and mongoose can be found below:
 
 ## Creating Resources
 The folder structure in the src folder is tidy-up as per production build, statring from `/src/index.js` as express file. Checkout [App Resources Details](./guides/ResourcesDetails.md) for more details.
+
+### Actual Github resource
+[https://github.com/PacktPublishing/The-Complete-Node.js-Developer-Course-3rd-Edition-](https://github.com/PacktPublishing/The-Complete-Node.js-Developer-Course-3rd-Edition-)

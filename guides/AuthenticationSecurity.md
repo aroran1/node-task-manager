@@ -306,7 +306,35 @@ app.use((req, res, next) => {
     next();
   }
 })
+
+// Maintainance middleware sending 503 for cases like DB update
+app.use((req, res, next) => {
+  res.status(503).send('Site is under maintainence. Please try again in few hours.');
+})
 ```
+
+ Its best practice to keep the middleware files in their own folders and import them as needed in the require routes files.
+
+ Signing up and logging in shouldn't use auth middleware so it shouldn't be passed as abpve example but should be pass to a particular route as 3 arguments and middle argument being the middleware.
+ router.get('/users', **middlewareImportMethod**, async(req, res, next) => {
+
+```
+// Create auth.js middleware file
+const auth = async (req, res, next) => {
+  console.log('Middleware running!');
+  next();
+};
+module.exports = auth;
+
+module.exports = auth;
+// Maintainance middleware sending 503 for cases like DB update
+router.get('/users', auth, async(req, res) => {
+  ...
+})
+
+run the path request in postman and notice the console.log // Auth Middleware running!
+```
+
 
 
 

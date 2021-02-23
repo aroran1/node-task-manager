@@ -2,9 +2,11 @@ const express = require('express');
 const router = new express.Router();
 // gets user models
 const User = require('../models/user');
+const auth = require('../middleware/auth');
 
 // Users
 // Create a new user with HTTP POST method to '/users' path
+// No middleware authentication required for this path
 router.post('/users', async (req, res) => {
   const user = new User(req.body);
 
@@ -17,6 +19,7 @@ router.post('/users', async (req, res) => {
   }
 });
 
+// No middleware authentication required for this path
 router.post('/users/login', async(req, res) => {
   try {
     // creating a custom method findByCredentials
@@ -34,7 +37,7 @@ router.post('/users/login', async(req, res) => {
 });
 
 // Read all users with HTTP GET method to '/users' path
-router.get('/users', async (req, res) => {
+router.get('/users', auth, async (req, res) => {
   try {
     const users = await User.find({});
     res.send(users)
