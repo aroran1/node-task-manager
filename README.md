@@ -9,6 +9,7 @@ A node project as a task-manager to create mongodb and apis.
 - [REST API](./guides/REST.md)
 - [App Resources and routing](./guides/ResourcesDetails.md)
 - [Authentication and Security](./guides/AuthenticationSecurity.md)
+  - [Express Middlewares](./guides/ExpressMiddlewares.md)
 
 
 ### Tutorial sepcific trial files

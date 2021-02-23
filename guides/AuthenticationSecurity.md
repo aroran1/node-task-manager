@@ -292,3 +292,10 @@ Here we will using **[JWT (JSON Web Tokens)](https://www.npmjs.com/package/jsonw
     ```
   - add same functionality for craete user path as well
 
+### Middleware to rescue
+All the reuests coming to the apis need to handle the authentication / token. Middlewares are useful to handle the authentication or any other steps that need to be taken care of before the router sends response.
+
+There are different types of middlewares. Read More about [Express Middleware](https://expressjs.com/en/guide/using-middleware.html).
+
+
+

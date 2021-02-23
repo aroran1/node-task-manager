@@ -7,6 +7,16 @@ const taskRouter = require('./router/task');
 const app = express();
 const port = process.env.PORT || 3000;
 
+
+// simple GET disabling middleware
+app.use((req, res, next) => {
+  if (req.method === 'GET') {
+    res.send('GET methods are disabled!');
+  } else {
+    next();
+  }
+})
+
 // makes the parsed json accessible as an object
 app.use(express.json());
 
