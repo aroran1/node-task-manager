@@ -27,4 +27,13 @@ In this middleware `app.use` accepts a function with `(req, res, next)`. req and
   POSTMAN get response: GET methods are disabled!
 ```
 
+### DB Update or Maintainance Middleware
+It catches all requests, sets status to 503 and send request.
+```
+// Maintainance middleware sending 503 for cases like DB update
+app.use((req, res, next) => {
+  res.status(503).send('Site is under maintainence. Please try again in few hours.');
+})
+```
+
 There are different types of middlewares. Read More about [Express Middleware](https://expressjs.com/en/guide/using-middleware.html).

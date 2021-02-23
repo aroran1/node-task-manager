@@ -8,14 +8,20 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 
-// simple GET disabling middleware
+// // simple GET disabling middleware
+// app.use((req, res, next) => {
+//   if (req.method === 'GET') {
+//     res.send('GET methods are disabled!');
+//   } else {
+//     next();
+//   }
+// })
+
+// Maintainance middleware sending 503 for cases like DB update
 app.use((req, res, next) => {
-  if (req.method === 'GET') {
-    res.send('GET methods are disabled!');
-  } else {
-    next();
-  }
+  res.status(503).send('Site is under maintainence. Please try again in few hours.');
 })
+
 
 // makes the parsed json accessible as an object
 app.use(express.json());

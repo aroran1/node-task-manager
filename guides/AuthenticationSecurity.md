@@ -297,5 +297,16 @@ All the reuests coming to the apis need to handle the authentication / token. Mi
 
 There are different types of middlewares. Read More about [Express Middleware](https://expressjs.com/en/guide/using-middleware.html).
 
+```
+// simple GET disabling middleware
+app.use((req, res, next) => {
+  if (req.method === 'GET') {
+    res.send('GET methods are disabled!');
+  } else {
+    next();
+  }
+})
+```
+
 
 
