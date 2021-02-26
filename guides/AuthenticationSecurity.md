@@ -328,12 +328,14 @@ module.exports = auth;
 
 module.exports = auth;
 // Maintainance middleware sending 503 for cases like DB update
+// auth is the middleware
 router.get('/users', auth, async(req, res) => {
   ...
 })
 
 run the path request in postman and notice the console.log // Auth Middleware running!
 ```
+Once you see teh middleware function working on the `/users` route, you cna use this method to actually check for the authentication.
 
 
 
