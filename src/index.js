@@ -1,8 +1,8 @@
 const express =  require('express');
  // requiring mongoose file ensures the mongoose runs and our project connects to db
 require('./db/mongoose'); 
-const userRouter = require('./router/user');
-const taskRouter = require('./router/task');
+const userRouter = require('./routers/user');
+const taskRouter = require('./routers/task');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -29,7 +29,7 @@ app.use(userRouter);
 app.use(taskRouter);
 
 app.listen(port, () => {
-  console.log(`Server is up on port ${port}!`);
+	console.log(`Server is up on port ${port}!`);
 });
 
 
@@ -63,24 +63,24 @@ app.listen(port, () => {
 const jwt = require('jsonwebtoken');
 
 const myTokenTest = async() => {
+	// sign method accept 3 arguments
+	// 1. some data info can be mongo document id
+	// 2. unquie serier of string or secret message
+	// 3. expriy info in string
+	const token = jwt.sign({ _id: '123dffdj'}, 'ilovepotatoeschipswithcoke', { expiresIn: '1 hour'});
+	console.log(token);
 
-  // sign method accept 3 arguments
-  // 1. some data info can be mongo document id
-  // 2. unquie serier of string or secret message
-  // 3. expriy info in string
-  const token = jwt.sign({ _id: '123dffdj'}, 'ilovepotatoeschipswithcoke', { expiresIn: '1 hour'});
-  console.log(token);
-  // terminal output
-  // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjNkZmZkaiIsImlhdCI6MTYxMzg2OTE2MywiZXhwIjoxNjEzODcyNzYzfQ.sI3cM6YmPNue8mLOuheadNr3UikcFvCFcTCkbKWRVeM
+	// terminal output
+	// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjNkZmZkaiIsImlhdCI6MTYxMzg2OTE2MywiZXhwIjoxNjEzODcyNzYzfQ.sI3cM6YmPNue8mLOuheadNr3UikcFvCFcTCkbKWRVeM
 
-  // verify method accepts 2 params, generated token with the secret message
-  const data = jwt.verify(token, 'ilovepotatoeschipswithcoke');
-  console.log(data);
-  // terminal output - success
-  // { _id: '123dffdj', iat: 1613869291, exp: 1613872891 }
+	// verify method accepts 2 params, generated token with the secret message
+	const data = jwt.verify(token, 'ilovepotatoeschipswithcoke');
+	console.log(data);
+	// terminal output - success
+	// { _id: '123dffdj', iat: 1613869291, exp: 1613872891 }
 
-  // terminal output - failed
-  // return done(new JsonWebTokenError('invalid signature'));
+	// terminal output - failed
+	// return done(new JsonWebTokenError('invalid signature'));
 }
 
 myTokenTest()
