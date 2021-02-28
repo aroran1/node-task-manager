@@ -402,6 +402,8 @@ module.exports = auth;
 ```
 
 ## User Logout
+
+### Logout from particular sessions by removing 1 token
 To create user logout we will need to find out the token user is logged in with and remove it from the tokens array.
 
 - we will start with garbbing the token value on the auth middleware and tagging it to the req object and we are doing with the user. This will make the token accessible on the /logout path.
@@ -442,4 +444,22 @@ router.post('/users/logout', auth, async(req, res) => {
 }
 ```
 
+### Logout from all sessions by clearing all active tokens
+When user logs in, each time we add the newly created JWT token to the user.tokens array which in essence is a login session. A user can have multiple sessions (sub-accounts for example Netflix or Disney channels to share with people).
+By adding logout from all accounts (or sessions) we will be clearing all the tokens set for that particular user.tokens array which will log them out from all the accounts / sessions at once until they login again.
 
+This can be achieved by below:
+```
+// /routers/user.js
+// logoutAll - to logout from all sessions
+router.post('/users/logoutAll', auth, async(req, res) => {
+	try {
+		req.user.tokens = []; // removing all active tokens
+		await req.user.save();
+		res.send();
+	} catch (e) {
+		res.status(500).send(e);
+	}
+})
+
+```

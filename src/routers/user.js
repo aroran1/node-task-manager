@@ -46,9 +46,20 @@ router.post('/users/logout', auth, async(req, res) => {
 		await req.user.save();
 		res.send();
 	} catch (e) {
-		res.status(500).send();
+		res.status(500).send(e);
 	}
 });
+
+// logoutAll - to logout from all sessions
+router.post('/users/logoutAll', auth, async(req, res) => {
+	try {
+		req.user.tokens = []; // removing all active tokens
+		await req.user.save();
+		res.send();
+	} catch (e) {
+		res.status(500).send(e);
+	}
+})
 
 // Read all users with HTTP GET method to '/users' path
 // the 2nd Parameter `auth` is the middleware which gets
