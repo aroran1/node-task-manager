@@ -37,3 +37,5 @@ app.use((req, res, next) => {
 ```
 
 There are different types of middlewares. Read More about [Express Middleware](https://expressjs.com/en/guide/using-middleware.html).
+
+Middleware example in the project **/middleware/auth.js**

@@ -339,6 +339,7 @@ Once you see the middleware function working on the `/users` route, you cna use 
 **/routers/user.js**
 - Instead of using /users path, use /users/me to only return single user details
 - return user from req.user
+
 **/middleware/auth.js**
 - Grab token value (and remove test Bearer)
 - Verify the jwt token with the passed secret that was used at the time of creation

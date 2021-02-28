@@ -10,6 +10,7 @@ A node project as a task-manager to create mongodb and apis.
 - [App Resources and routing](./guides/ResourcesDetails.md)
 - [Authentication and Security](./guides/AuthenticationSecurity.md)
   - [Express Middlewares](./guides/ExpressMiddlewares.md)
+- [Postman](./guides/Postman.md)
 
 
 ### Tutorial sepcific trial files
