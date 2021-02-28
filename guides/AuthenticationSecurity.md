@@ -401,7 +401,45 @@ const auth = async (req, res, next) => {
 module.exports = auth;
 ```
 
+## User Logout
+To create user logout we will need to find out the token user is logged in with and remove it from the tokens array.
 
+- we will start with garbbing the token value on the auth middleware and tagging it to the req object and we are doing with the user. This will make the token accessible on the /logout path.
+```
+// /middleware/auth.js
+const auth = async (req, res, next) => {
+	try {
+		...
+		if (!user) {
+			throw new Error('User Not found!');
+		}
 
+		req.token = token;
+		req.user = user;
+    ...
+};
+```
+- then we create the /logout path in the router, access this token from the req object and filter it out
+```
+router.post('/users/logout', auth, async(req, res) => {
+	try {
+		req.user.tokens = req.user.tokens.filter( token => {
+			return token.token != req.token
+		})
+
+		await user.save();
+		res.send();
+	} catch (e) {
+		res.status(500).send();
+	}
+});
+```
+- set `500` status if there is an error
+- Run logout in postman and try running user profile after that should see below.
+```
+{
+    "error": "Please authenticate!"
+}
+```
 
 

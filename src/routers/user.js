@@ -36,6 +36,20 @@ router.post('/users/login', async(req, res) => {
 	}
 });
 
+// logout
+router.post('/users/logout', auth, async(req, res) => {
+	try {
+		req.user.tokens = req.user.tokens.filter( token => {
+			return token.token !== req.token
+		})
+
+		await req.user.save();
+		res.send();
+	} catch (e) {
+		res.status(500).send();
+	}
+});
+
 // Read all users with HTTP GET method to '/users' path
 // the 2nd Parameter `auth` is the middleware which gets
 // triggered after user hits /users path and before the async method

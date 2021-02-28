@@ -20,6 +20,7 @@ const auth = async (req, res, next) => {
 			throw new Error('User Not found!');
 		}
 
+		req.token = token;
 		req.user = user;
 
 		next();
