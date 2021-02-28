@@ -335,7 +335,71 @@ router.get('/users', auth, async(req, res) => {
 
 run the path request in postman and notice the console.log // Auth Middleware running!
 ```
-Once you see teh middleware function working on the `/users` route, you cna use this method to actually check for the authentication.
+Once you see the middleware function working on the `/users` route, you cna use this method to actually check for the authentication as below.
+**/routers/user.js**
+- Instead of using /users path, use /users/me to only return single user details
+- return user from req.user
+**/middleware/auth.js**
+- Grab token value (and remove test Bearer)
+- Verify the jwt token with the passed secret that was used at the time of creation
+- Find the matched user by passing { _id: deccoded._id, 'tokens.token': token } and making sure the token also exit on the array so it can be deleted when user logs out 
+```
+/routers/user.js
+// Read all users with HTTP GET method to '/users' path
+// the 2nd Parameter `auth` is the middleware which gets
+// triggered after user hits /users path and before the async method
+// /users path shouldn't let one user access the data of all the other users
+// so its not a valid user case so instead see /users/me
+router.get('/users', auth, async (req, res) => {
+	try {
+		const users = await User.find({});
+		res.send(users)
+	} catch (e) {
+		res.status(500).send(e);
+	}
+});
+
+// the above /users will never be used by users so instaed can use /user/me path below
+// the finding user functionality is already been taken care of by the auth middleware and 
+// returned as req.user so not required in this route anymore instead res returns user from re.user
+router.get('/users/me', auth, async (req, res) => {
+	res.send(req.user)
+})
+
+/middleware/auth.js
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+
+const auth = async (req, res, next) => {
+	// console.log('Auth Middleware running!');
+	// next();
+
+	try {
+		const token = req.header('Authorization').replace('Bearer ', '');
+		// console.log(token);
+		const deccoded = jwt.verify(token, 'thisismynodecourse');
+
+		// using findOne instead of findById is because we want to finds the user with Id but also
+		// want to make the token exist in the tokens array so when user logs out
+		// we can delete this token from the array we achieve this by searching for
+		// 'tokens.token' with the parsed token value
+		const user = await User.findOne({ _id: deccoded._id, 'tokens.token': token });
+
+		if (!user) {
+			throw new Error('User Not found!');
+		}
+
+		req.user = user;
+
+		next();
+	} catch (e) {
+		res.status(401).send({ error: 'Please authenticate!' });
+	}
+};
+
+module.exports = auth;
+```
+
 
 
 

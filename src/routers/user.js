@@ -37,8 +37,11 @@ router.post('/users/login', async(req, res) => {
 });
 
 // Read all users with HTTP GET method to '/users' path
-// /users will never be used by users so instaed can use /user/me path below
-router.get('/users', async (req, res) => {
+// the 2nd Parameter `auth` is the middleware which gets
+// triggered after user hits /users path and before the async method
+// /users path shouldn't let one user access the data of all the other users
+// so its not a valid user case so instead see /users/me
+router.get('/users', auth, async (req, res) => {
 	try {
 		const users = await User.find({});
 		res.send(users)
@@ -47,6 +50,9 @@ router.get('/users', async (req, res) => {
 	}
 });
 
+// the above /users will never be used by users so instaed can use /user/me path below
+// the finding user functionality is already been taken care of by the auth middleware and 
+// returned as req.user so not required in this route anymore instead res returns user from re.user
 router.get('/users/me', auth, async (req, res) => {
 	res.send(req.user)
 })
