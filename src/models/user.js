@@ -50,6 +50,28 @@ const userSchema = new mongoose.Schema({
 	}]
 });
 
+// User Data Security - custom method
+// custom method to alter the user object before sending back to user via /login
+// userSchema.methods.getPublicProfile = function() {
+// 	const user = this;
+// 	const userObject = user.toObject();
+
+// 	delete userObject.password;
+// 	delete userObject.tokens;
+
+// 	return userObject;
+// }
+// toJSON method
+userSchema.methods.toJSON = function() {
+	const user = this;
+	const userObject = user.toObject();
+
+	delete userObject.password;
+	delete userObject.tokens;
+
+	return userObject;
+}
+
 // methods are available on the instances of that collection (aka instance methods)
 // need this binding so don't use arrow function
 userSchema.methods.generateAuthToken = async function() {

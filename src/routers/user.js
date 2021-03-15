@@ -30,7 +30,12 @@ router.post('/users/login', async(req, res) => {
 		// make sure you are running the generateAuthToken method on the user instance created above with user cont
 		// and not on the whole collection as it need to be unique for each user
 		const token = await user.generateAuthToken();
+
+		// custom method to remove certain properties before sending the user data back
+		// res.send({ user: user.getPublicProfile(), token });
+		// same as getPublicProfile but without custom method instea used toJSON
 		res.send({ user, token });
+
 	} catch (e) {
 		res.status(400).send(e);
 	}
