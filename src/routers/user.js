@@ -87,23 +87,24 @@ router.get('/users/me', auth, async (req, res) => {
 	res.send(req.user)
 })
 
-// Read a users with matched :id with HTTP GET method to '/users/:id' path
-router.get('/users/:id', async (req, res) => {
-	// console.log(req.params);
-	const _id = req.params.id;
+// User shouldn't have access to other users data by id so this path is not required anymore - COMMENTED OUT CODE
+// // Read a users with matched :id with HTTP GET method to '/users/:id' path
+// router.get('/users/:id', async (req, res) => {
+// 	// console.log(req.params);
+// 	const _id = req.params.id;
 
-	try {
-		const user = await User.findById(_id);
+// 	try {
+// 		const user = await User.findById(_id);
 
-		if (!user) {
-			return res.status(404).send()
-		}
+// 		if (!user) {
+// 			return res.status(404).send()
+// 		}
 
-		res.send(user);
-	} catch (e) {
-		res.status(500).send(e);
-	}
-});
+// 		res.send(user);
+// 	} catch (e) {
+// 		res.status(500).send(e);
+// 	}
+// });
 
 // Update user details
 router.patch('/users/:id', async (req, res) => {
@@ -133,17 +134,37 @@ router.patch('/users/:id', async (req, res) => {
 	}
 });
 
-// delete a user
-router.delete('/users/:id', async (req, res) => {
+// User is only allowed to delete their own accounts rather then deleting any account by id - REFACTORED BELOW
+// // delete a user
+// router.delete('/users/:id', async (req, res) => {
+// 	try {
+// 		const user = await User.findByIdAndDelete(req.params.id);
+// 		if (!user) {
+// 	  		res.status(404).send();
+// 		}
+// 		res.send(user);
+//   	} catch (e) {
+// 		res.status(500).send();
+//   	}
+// });
+
+// user can only delete their own account
+// path changed to '/users/me'
+// - apply auth middleware
+// - so no need to find the ID can be accessed via req.user._id
+// change delete to async req.user.remove();
+router.delete('/users/me', auth, async (req, res) => {
 	try {
-		const user = await User.findByIdAndDelete(req.params.id);
-		if (!user) {
-	  		res.status(404).send();
-		}
-		res.send(user);
+		// const user = await User.findByIdAndDelete(req.user._id);
+		// if (!user) {
+	  // 		res.status(404).send();
+		// }
+			await req.user.remove();
+			res.send(req.user);
   	} catch (e) {
-		res.status(500).send();
+			res.status(500).send();
   	}
 });
+
 
 module.exports = router;
