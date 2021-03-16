@@ -106,4 +106,10 @@ userSchema.methods.toJSON = function() {
 }
 ```
 Now run the postman and things should work as previous example.
-This toJSON change get applied to all the user data by default and change is reflected everywhere. 
+This toJSON change get applied to all the user data by default and change is reflected everywhere.
+
+**But the question is how toJSON runs without us explicitly calling it?**
+// When we call res.send it calls JSON.stringify behind the scene, so when we use `res.send({ user: user, token });` the object is getting stringified. Then we set toJSON method on the user to manipulate the object and re-organise the object to send back only the properties we want to expose.
+
+toJSON test example set on the index file.
+

@@ -59,31 +59,50 @@ app.listen(port, () => {
 // ******************************************************************************//
 // ******************************************************************************//
 
-// JWT local testing
-const jwt = require('jsonwebtoken');
+// // JWT local testing
+// const jwt = require('jsonwebtoken');
 
-const myTokenTest = async() => {
-	// sign method accept 3 arguments
-	// 1. some data info can be mongo document id
-	// 2. unquie serier of string or secret message
-	// 3. expriy info in string
-	const token = jwt.sign({ _id: '123dffdj'}, 'ilovepotatoeschipswithcoke', { expiresIn: '1 hour'});
-	console.log(token);
+// const myTokenTest = async() => {
+// 	// sign method accept 3 arguments
+// 	// 1. some data info can be mongo document id
+// 	// 2. unquie serier of string or secret message
+// 	// 3. expriy info in string
+// 	const token = jwt.sign({ _id: '123dffdj'}, 'ilovepotatoeschipswithcoke', { expiresIn: '1 hour'});
+// 	console.log(token);
 
-	// terminal output
-	// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjNkZmZkaiIsImlhdCI6MTYxMzg2OTE2MywiZXhwIjoxNjEzODcyNzYzfQ.sI3cM6YmPNue8mLOuheadNr3UikcFvCFcTCkbKWRVeM
+// 	// terminal output
+// 	// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxMjNkZmZkaiIsImlhdCI6MTYxMzg2OTE2MywiZXhwIjoxNjEzODcyNzYzfQ.sI3cM6YmPNue8mLOuheadNr3UikcFvCFcTCkbKWRVeM
 
-	// verify method accepts 2 params, generated token with the secret message
-	const data = jwt.verify(token, 'ilovepotatoeschipswithcoke');
-	console.log(data);
-	// terminal output - success
-	// { _id: '123dffdj', iat: 1613869291, exp: 1613872891 }
+// 	// verify method accepts 2 params, generated token with the secret message
+// 	const data = jwt.verify(token, 'ilovepotatoeschipswithcoke');
+// 	console.log(data);
+// 	// terminal output - success
+// 	// { _id: '123dffdj', iat: 1613869291, exp: 1613872891 }
 
-	// terminal output - failed
-	// return done(new JsonWebTokenError('invalid signature'));
+// 	// terminal output - failed
+// 	// return done(new JsonWebTokenError('invalid signature'));
+// }
+
+// myTokenTest()
+
+// ******************************************************************************//
+// ******************************************************************************//
+
+// toJSON
+const pet = {
+	name: "Hal"
+};
+
+pet.toJSON = function() {
+	// console.log('1', this);
+	// return this;
+
+	// or could also return just the empty object
+	return {}
 }
 
-myTokenTest()
+console.log('2', JSON.stringify(pet)); // OUTPUT: {"name":"Hal"}
+// When we call res.send it calls JSON.stringify behind the scene 
 
 // ******************************************************************************//
 // ******************************************************************************//
