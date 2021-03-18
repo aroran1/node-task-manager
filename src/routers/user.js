@@ -4,9 +4,12 @@ const router = new express.Router();
 const User = require('../models/user');
 const auth = require('../middleware/auth');
 
-// Users
+
+/**************************************************************************/
+/* Create a new user                                                      */
+/**************************************************************************/
 // Create a new user with HTTP POST method to '/users' path
-// No middleware authentication required for this path
+// No middleware authentication required for creating a new account
 router.post('/users', async (req, res) => {
 	const user = new User(req.body);
 
@@ -19,7 +22,11 @@ router.post('/users', async (req, res) => {
 	}
 });
 
-// No middleware authentication required for this path
+
+/**************************************************************************/
+/* Login User                                                             */
+/**************************************************************************/
+// No middleware authentication required for logging into an account
 router.post('/users/login', async(req, res) => {
 	try {
 		// creating a custom method findByCredentials
@@ -41,7 +48,11 @@ router.post('/users/login', async(req, res) => {
 	}
 });
 
-// logout
+
+/**************************************************************************/
+/* Logout User from 1 or from all sessions                                */
+/**************************************************************************/
+// logout - signle session expiring 1 token only
 router.post('/users/logout', auth, async(req, res) => {
 	try {
 		req.user.tokens = req.user.tokens.filter( token => {
@@ -55,7 +66,7 @@ router.post('/users/logout', auth, async(req, res) => {
 	}
 });
 
-// logoutAll - to logout from all sessions
+// logoutAll - to logout from all sessions emptying all token array
 router.post('/users/logoutAll', auth, async(req, res) => {
 	try {
 		req.user.tokens = []; // removing all active tokens
@@ -66,6 +77,10 @@ router.post('/users/logoutAll', auth, async(req, res) => {
 	}
 })
 
+
+/**************************************************************************/
+/* Get all users                                                          */
+/**************************************************************************/
 // Read all users with HTTP GET method to '/users' path
 // the 2nd Parameter `auth` is the middleware which gets
 // triggered after user hits /users path and before the async method
@@ -80,6 +95,27 @@ router.get('/users', auth, async (req, res) => {
 	}
 });
 
+
+/**************************************************************************/
+/* Get User by /id or /me                                                 */
+/**************************************************************************/
+// User shouldn't have access to other users data by id so this
+// path is not required anymore - REFACTORED BELOW
+// // Read a users with matched :id with HTTP GET method to '/users/:id' path
+// router.get('/users/:id', async (req, res) => {
+// 	// console.log(req.params);
+// 	const _id = req.params.id;
+// 	try {
+// 		const user = await User.findById(_id);
+// 		if (!user) {
+// 			return res.status(404).send()
+// 		}
+// 		res.send(user);
+// 	} catch (e) {
+// 		res.status(500).send(e);
+// 	}
+// });
+
 // the above /users will never be used by users so instaed can use /user/me path below
 // the finding user functionality is already been taken care of by the auth middleware and 
 // returned as req.user so not required in this route anymore instead res returns user from re.user
@@ -87,27 +123,40 @@ router.get('/users/me', auth, async (req, res) => {
 	res.send(req.user)
 })
 
-// User shouldn't have access to other users data by id so this path is not required anymore - COMMENTED OUT CODE
-// // Read a users with matched :id with HTTP GET method to '/users/:id' path
-// router.get('/users/:id', async (req, res) => {
-// 	// console.log(req.params);
-// 	const _id = req.params.id;
+
+/**************************************************************************/
+/* Update User by /id or /me                                              */
+/**************************************************************************/
+// User should only be allowed to updated their own details so
+// accessing user details via ID is not required - REFACTORED BELOW
+// router.patch('/users/:id', async (req, res) => {
+//   // check if the patch operation property is allowed
+// 	const updates = Object.keys(req.body); // operation property
+// 	const allowedOperations = ['name', 'email', 'password', 'age'];
+// 	const isValidOperation = updates.every( update => allowedOperations.includes(update));
+
+// 	if (!isValidOperation) {
+// 		return res.status(400).send({ error: 'Invalid updates!' });
+// 	}
 
 // 	try {
-// 		const user = await User.findById(_id);
+// 		// const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true})
+// 		const user = await User.findById(req.params.id);
+
+// 		updates.forEach( update => user[update] = req.body[update]);
+// 		await user.save();
 
 // 		if (!user) {
 // 			return res.status(404).send()
 // 		}
-
 // 		res.send(user);
+
 // 	} catch (e) {
-// 		res.status(500).send(e);
+// 		res.status(400).send(e);
 // 	}
 // });
 
-// Update user details
-router.patch('/users/:id', async (req, res) => {
+router.patch('/users/me', auth, async (req, res) => {
   // check if the patch operation property is allowed
 	const updates = Object.keys(req.body); // operation property
 	const allowedOperations = ['name', 'email', 'password', 'age'];
@@ -118,23 +167,24 @@ router.patch('/users/:id', async (req, res) => {
 	}
 
 	try {
-		// const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true})
-		const user = await User.findById(req.params.id);
+		// // const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true})
+		// const user = await User.findById(req.params.id);
 
-		updates.forEach( update => user[update] = req.body[update]);
-		await user.save();
-
-		if (!user) {
-			return res.status(404).send()
-		}
-		res.send(user);
+		updates.forEach( update => req.user[update] = req.body[update]);
+		await req.user.save();
+		res.send(req.user);
 
 	} catch (e) {
 		res.status(400).send(e);
 	}
 });
 
-// User is only allowed to delete their own accounts rather deleting someone else's account by id - REFACTORED BELOW
+
+/**************************************************************************/
+/* Delete User by /id or /me                                              */
+/**************************************************************************/
+// User is only allowed to delete their own accounts rather deleting
+// someone else's account by id - REFACTORED BELOW
 // // delete a user
 // router.delete('/users/:id', async (req, res) => {
 // 	try {
@@ -170,5 +220,7 @@ router.delete('/users/me', auth, async (req, res) => {
   	}
 });
 
+/**************************************************************************/
+/**************************************************************************/
 
 module.exports = router;
