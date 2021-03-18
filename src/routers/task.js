@@ -1,4 +1,5 @@
 const express = require('express');
+const auth = require("../middleware/auth");
 const router = new express.Router();
 
 // get task model
@@ -7,8 +8,13 @@ const Task = require('../models/task');
 
 // Tasks
 // Create a new task with HTTP POST method to '/tasks' path
-router.post('/tasks', async (req, res) => {
-  const task = new Task(req.body);
+router.post('/tasks', auth, async (req, res) => {
+  // const task = new Task(req.body);
+
+  const task = new Task({
+    ...req.body,
+    owner: req.user._id
+  })
 
   try {
     await task.save();

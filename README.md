@@ -12,6 +12,7 @@ A node project as a task-manager to create mongodb and apis.
   - [Express Middlewares](./guides/ExpressMiddlewares.md)
   - [User Data Security](./guides/UserDataSecurity.md)
 - [Postman](./guides/Postman.md)
+- [User Access Restriction and Task relation](./guides/UserTaskRelation.md)
 
 
 ### Tutorial sepcific trial files

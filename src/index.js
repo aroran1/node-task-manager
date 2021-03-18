@@ -88,21 +88,21 @@ app.listen(port, () => {
 // ******************************************************************************//
 // ******************************************************************************//
 
-// toJSON
-const pet = {
-	name: "Hal"
-};
+// // toJSON
+// const pet = {
+// 	name: "Hal"
+// };
 
-pet.toJSON = function() {
-	// console.log('1', this);
-	// return this;
+// pet.toJSON = function() {
+// 	// console.log('1', this);
+// 	// return this;
 
-	// or could also return just the empty object
-	return {}
-}
+// 	// or could also return just the empty object
+// 	return {}
+// }
 
-console.log('2', JSON.stringify(pet)); // OUTPUT: {"name":"Hal"}
-// When we call res.send it calls JSON.stringify behind the scene 
+// console.log('2', JSON.stringify(pet)); // OUTPUT: {"name":"Hal"}
+// // When we call res.send it calls JSON.stringify behind the scene 
 
 // ******************************************************************************//
 // ******************************************************************************//
