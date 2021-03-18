@@ -134,7 +134,7 @@ router.patch('/users/:id', async (req, res) => {
 	}
 });
 
-// User is only allowed to delete their own accounts rather then deleting any account by id - REFACTORED BELOW
+// User is only allowed to delete their own accounts rather deleting someone else's account by id - REFACTORED BELOW
 // // delete a user
 // router.delete('/users/:id', async (req, res) => {
 // 	try {
@@ -148,6 +148,9 @@ router.patch('/users/:id', async (req, res) => {
 //   	}
 // });
 
+// add auth middleware
+// - auth middleware is attaching a user to the request which can be used in the method below
+// instead of fining the user by ID 
 // user can only delete their own account
 // path changed to '/users/me'
 // - apply auth middleware
@@ -155,6 +158,7 @@ router.patch('/users/:id', async (req, res) => {
 // change delete to async req.user.remove();
 router.delete('/users/me', auth, async (req, res) => {
 	try {
+		// no need to
 		// const user = await User.findByIdAndDelete(req.user._id);
 		// if (!user) {
 	  // 		res.status(404).send();
