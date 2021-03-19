@@ -50,6 +50,12 @@ const userSchema = new mongoose.Schema({
 	}]
 });
 
+userSchema.virtual('tasks', {
+	ref: 'Task',
+	localField: '_id', // localField is where local data is stored - so the fireign field is related to user id
+	foreignField: 'owner' // name of the field in the Tasks db that relates to the User
+})
+
 // User Data Security - custom method
 // custom method to alter the user object before sending back to user via /login
 // userSchema.methods.getPublicProfile = function() {

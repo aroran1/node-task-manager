@@ -13,8 +13,8 @@ User should only be able to perform CURD operations on their own tasks rather th
 - src/routers/task.js
 
 To create the relation there are 2 ways:
-1. User can store ids of all the tasks user has created
-2. *Individual Task can store ids of the users who have created it*
+1. User can store ids of all the tasks user has created ( 1 to multiple relation)
+2. *Individual Task can store ids of the users who have created it* ( 1 to 1 relation)
 
 We will be following the option #2 in this example as its a better approach.
 
@@ -24,10 +24,11 @@ Add an `owners` field to the task data model, and setting its type as object id 
   ...
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'User' // mongoose provide us easy way to access another model by using ref and passing the model name
   }
 ```
-*PS: Drop the old data collection in the Robo 3T as the don't have any task user relation*
+**PS: Drop the old data collection in the Robo 3T as the don't have any task user relation**
 
 ### Task router to authentocate and attach user Id
 In the Create task route, take the task from the reqbody as previously, convert it to an object and tag owners id user auth and ES6 spread operator.
@@ -56,3 +57,72 @@ Now try creating a new user (which automatically logs you in) and craete a new t
 }
 ```
 Having access to this owner's id will allow us to authenticate the owner and update / delete the task as per user action.
+
+### Running some relation test
+
+#### One way binding
+`./index.js`
+Mongoose provide us easy way to access one model from another by using ref key with the model name for example in the Task model within `owner` property we passed `ref: 'User'`. That will allow accessing the realted User document attached to the particular task when we use `Task.populate('owner').execPopulate()`.
+```
+const Task = require("./models/task");
+
+const main = async () => {
+	const task = await Task.findById('60539ec7555c430a5fb863e6');
+	console.log(task);
+	console.log(task.owner); // returns owner id
+
+	await task.populate('owner').execPopulate();
+	console.log(task.owner); // returns owner document with ref in place in the task > owner model
+}
+
+main()
+
+// TERMINAL OUTPUT
+{
+  age: 20,
+  _id: 60539d6880502509d677f872,
+  name: 'Reema Seed',
+  email: 'reem@seed.com',
+  password: '$2a$08$1uq4BrpqWN/Waqhfi4rwAeq/Etgn4pwXtb97.HcnGhUmpoqZsLkb2',
+  tokens: [
+    {
+      _id: 60539d6880502509d677f873,
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDUzOWQ2ODgwNTAyNTA5ZDY3N2Y4NzIiLCJpYXQiOjE2MTYwOTI1MjB9.IzOPth_5WzOiMQcuaBe96ru2Sme55su713oJsSlw13I'
+    }
+  ],
+  __v: 1
+}
+```
+
+#### Two way binding
+With above in place it has created a 1 way binding which means, from the task document, we can also access the User document but at the moment we can't access a Task document from Users document.
+
+To do this, we are going to set-up a virtual property. A virtual property is not a data stored in the data base but its a relationship between 2 entities, ie, User and Task. Please note, in the tasks model `owner` is a real field stored in the tasks db but virtual is not stired in the db, its just a way for mongoose to figure out who owns what and how they are related.
+`/src/models/user.js`
+```
+userSchema.virtual('tasks', {
+	ref: 'Task',
+	localField: '_id', // localField is where local data is stored - so the fireign field is related to user id
+	foreignField: 'owner' // name of the field in the Tasks db that relates to the User
+})
+```
+
+once this in place go back to `./index.js` test and add below:
+```
+const Task = require("./models/task");
+const User = require("./models/user");
+
+const main = async () => {
+	const task = await Task.findById('60539ec7555c430a5fb863e6');
+	// console.log(task);
+	// console.log(task.owner); // returns owner id
+	// await task.populate('owner').execPopulate();
+	// console.log(task.owner); // returns owner document with ref in place in the task > owner model
+
+	const user = await User.findById('60539d6880502509d677f872');
+	await user.populate('tasks').execPopulate();
+	console.log(user.tasks); // returns an array of
+}
+
+main()
+```
