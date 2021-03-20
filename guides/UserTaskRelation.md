@@ -126,3 +126,5 @@ const main = async () => {
 
 main()
 ```
+
+Now add auth to all the tasks routes and find item but `{_id: req.params.id, ownder: req.user._id}`.
