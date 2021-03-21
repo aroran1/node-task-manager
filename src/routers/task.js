@@ -40,7 +40,9 @@ router.post('/tasks', auth, async (req, res) => {
 //   }
 // });
 
-// GET /tasks?completed=true
+// NOTE: query parama passes the above values as string
+// Filtering: GET /tasks?completed=true
+// Pagination: GET /tasks?limit=10&skip=0
 router.get('/tasks', auth, async (req, res) => {
   try {
     //method 1
@@ -51,6 +53,7 @@ router.get('/tasks', auth, async (req, res) => {
 
     const match = {}; // sets as empty object
 
+    // matches filters
     if (req.query.completed) {  // checks if that filter is provided
       match.completed = req.query.completed === 'true' // converts the string true false to boolean
     }
@@ -58,7 +61,11 @@ router.get('/tasks', auth, async (req, res) => {
     // method 3 with filtering
     await req.user.populate({
       path: 'tasks',
-      match
+      match,
+      options: {
+        limit: parseInt(req.query.limit), // ignored by mongoose if nothing is passed
+        skip: parseInt(req.query.skip) // ignored by mongoose if nothing is passed
+      }
     }).execPopulate();
 
     res.send(req.user.tasks);

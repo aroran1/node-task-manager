@@ -90,3 +90,41 @@ router.get('/tasks', auth, async (req, res) => {
   }
 });
 ```
+
+## Pagination
+Pagination is a technique to craete pages of data so user is not fetching everything at ones. Google search provides its serach results and list it with the page number with each page showing 10 results. Some sites user this technique with `load more` button like in Expedia's search resukts page or as `infinite scroll and load` as with instsgram which automatically fetches the data behind the scene based on your scroll positions. This helps limit the amount of data that get returned to a request and helps make it fast. There are 2 key ways to achieve this pages of data behaviour:
+- limit - this allows you to only request the limited number of data, it could be 10 or 100 or 1000
+- skip - skip allows you to skip the specified number from the pages of data, lets see some combinations below:
+  - `/tasks?limit=10&skip=0` = returns first 10 results and skips 0
+  - `/tasks?limit=10&skip=10` = returns second 10 results and skips the first 10 results
+
+To pass pagination and sorting information to mongoose we will be using `options` property with limit and skip keys and their respective values from the param and msking sure to convert them to numbers by using `parseInt`.
+
+```
+// NOTE: query parama passes the above values as string
+// Filtering: GET /tasks?completed=true
+// Pagination: GET /tasks?limit=10&skip=0
+router.get('/tasks', auth, async (req, res) => {
+  try {
+    const match = {}; // sets as empty object
+    // matches filters
+    if (req.query.completed) {  // checks if that filter is provided
+      match.completed = req.query.completed === 'true' // converts the string true false to boolean
+    }
+
+    // method 3 with filtering
+    await req.user.populate({
+      path: 'tasks',
+      match,
+      options: {
+        limit: parseInt(req.query.limit), // ignored by mongoose if nothing is passed
+        skip: parseInt(req.query.skip) // ignored by mongoose if nothing is passed
+      }
+    }).execPopulate();
+
+    res.send(req.user.tasks);
+  } catch(e) {
+    res.status(500).send(e);
+  }
+});
+```
