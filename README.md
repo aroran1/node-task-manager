@@ -13,6 +13,7 @@ A node project as a task-manager to create mongodb and apis.
   - [User Data Security](./guides/UserDataSecurity.md)
 - [Postman](./guides/Postman.md)
 - [User Access Restriction and Task relation](./guides/UserTaskRelation.md)
+- [Sorting, Pagination and Filtering](./guides/DataEfficiency.md)
 
 
 ### Tutorial sepcific trial files

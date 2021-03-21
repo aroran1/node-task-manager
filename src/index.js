@@ -108,21 +108,21 @@ app.listen(port, () => {
 // ******************************************************************************//
 // Testing Task User relation
 
-const Task = require("./models/task");
-const User = require("./models/user");
+// const Task = require("./models/task");
+// const User = require("./models/user");
 
-const main = async () => {
-	const task = await Task.findById('60539ec7555c430a5fb863e6');
-	// console.log(task);
-	// console.log(task.owner); // returns owner id
-	// await task.populate('owner').execPopulate();
-	// console.log(task.owner); // returns owner document with ref in place in the task > owner model
+// const main = async () => {
+// 	const task = await Task.findById('60539ec7555c430a5fb863e6');
+// 	// console.log(task);
+// 	// console.log(task.owner); // returns owner id
+// 	// await task.populate('owner').execPopulate();
+// 	// console.log(task.owner); // returns owner document with ref in place in the task > owner model
 
-	const user = await User.findById('60539d6880502509d677f872');
-	await user.populate('tasks').execPopulate();
-	console.log(user.tasks); // returns an array of
-}
+// 	const user = await User.findById('60539d6880502509d677f872');
+// 	await user.populate('tasks').execPopulate(); // this worked when task model was pass as object instead of schema
+// 	console.log(user.tasks); // returns an array of
+// }
 
-main()
+// main()
 // ******************************************************************************//
 // ******************************************************************************//
