@@ -127,4 +127,28 @@ const main = async () => {
 main()
 ```
 
+## Tasks
 Now add auth to all the tasks routes and find item but `{_id: req.params.id, ownder: req.user._id}`.
+
+### Delete tasks on User delete
+Also need to make sure when user delete their account, user tasks also get deleted.
+- You can do this by either using the route delete user method, or
+- by setting a method in User model as a middleware which is generally a good practice to follow do it can be a reusable method
+
+We will follow the User model as a middleware, and we will make this change on the `pre` event of when user's route calls `remove` method. We are also using `deleteMany` query and matching the task with where owner id matches the user id.
+
+`src/models/user.js`
+```
+const Task = require('./task');
+
+// Delete Tasks when User is deleted with remove
+userSchema.pre('remove', async function (next) {
+	const user = this;
+	await Task.deleteMany({ owner: user._id});
+
+	next();
+})
+```
+Once in place and you'll remove a User will automatically remove the tasks.
+
+
