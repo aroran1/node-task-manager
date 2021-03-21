@@ -41,8 +41,9 @@ router.post('/tasks', auth, async (req, res) => {
 // });
 
 // NOTE: query parama passes the above values as string
-// Filtering: GET /tasks?completed=true
-// Pagination: GET /tasks?limit=10&skip=0
+// Filtering: GET /tasks?completed=true || /tasks?completed=false
+// Pagination: GET /tasks?limit=10&skip=0 || /tasks?limit=10&skip=10
+// Sorting: GET /tasks?sortBy=createdAt_asc || /tasks?sortBy=createdAt_desc
 router.get('/tasks', auth, async (req, res) => {
   try {
     //method 1
@@ -52,10 +53,17 @@ router.get('/tasks', auth, async (req, res) => {
     // await req.user.populate('tasks').execPopulate();
 
     const match = {}; // sets as empty object
+    const sort = {}; // sets as empty object
 
     // matches filters
     if (req.query.completed) {  // checks if that filter is provided
       match.completed = req.query.completed === 'true' // converts the string true false to boolean
+    }
+
+    // matches sorting
+    if (req.query.sortBy) {
+       const parts = req.query.sortBy.split('_'); // split at special character
+       sort[parts[0]] = parts[1] === 'desc' ? -1 : 1; // assign asc or desc values in numeric form as 1 or -1
     }
 
     // method 3 with filtering
@@ -64,7 +72,8 @@ router.get('/tasks', auth, async (req, res) => {
       match,
       options: {
         limit: parseInt(req.query.limit), // ignored by mongoose if nothing is passed
-        skip: parseInt(req.query.skip) // ignored by mongoose if nothing is passed
+        skip: parseInt(req.query.skip), // ignored by mongoose if nothing is passed
+        sort
       }
     }).execPopulate();
 

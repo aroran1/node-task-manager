@@ -128,3 +128,70 @@ router.get('/tasks', auth, async (req, res) => {
   }
 });
 ```
+
+## Sorting
+Sorting allows users to request the data in a particular order ie, incomplet tasks first etc. The sorting is usually accessed by sort or sortBy property name and there are usually 2 pieces to sorting, that is either `by field` and `by order`, following the apptern in our case will look like this `GET /tasks?sortBy=createdAt_asc`, timestamp as field and asc = ascending order or you can use desc = descending order (note: _ between createdAt_asc can be any speacial character which will help break down the info in 2 chunks).
+
+sortby option uses these values like this in the route.
+```
+ await req.user.populate({
+      path: 'tasks',
+      match,
+      options: {
+        limit: parseInt(req.query.limit), // ignored by mongoose if nothing is passed
+        skip: parseInt(req.query.skip), // ignored by mongoose if nothing is passed
+        sort: {
+          createdAt: -1 // 1 = ascending && -1 = descending order
+        }
+      }
+    }).execPopulate();
+  ...
+}
+```
+Note:  1 = ascending && -1 = descending order
+you could also switch `createdAt` to `completed` field as below. showing ture first with -1 and false with 1
+```
+sort: {
+  completed: -1 // 1 = ascending && -1 = descending order
+}
+```
+Fully complete method with all data optimizations in place
+```
+// NOTE: query parama passes the above values as string
+// Filtering: GET /tasks?completed=true || /tasks?completed=false
+// Pagination: GET /tasks?limit=10&skip=0 || /tasks?limit=10&skip=10
+// Sorting: GET /tasks?sortBy=createdAt_asc || /tasks?sortBy=createdAt_desc
+router.get('/tasks', auth, async (req, res) => {
+  try {
+    const match = {}; // sets as empty object
+    const sort = {}; // sets as empty object
+
+    // matches filters
+    if (req.query.completed) {  // checks if that filter is provided
+      match.completed = req.query.completed === 'true' // converts the string true false to boolean
+    }
+
+    // matches sorting
+    if (req.query.sortBy) {
+       const parts = req.query.sortBy.split('_'); // split at special character
+       sort[parts[0]] = parts[1] === 'desc' ? -1 : 1; // assign asc or desc values in numeric form as 1 or -1
+    }
+
+    // method 3 with filtering
+    await req.user.populate({
+      path: 'tasks',
+      match,
+      options: {
+        limit: parseInt(req.query.limit), // ignored by mongoose if nothing is passed
+        skip: parseInt(req.query.skip), // ignored by mongoose if nothing is passed
+        sort
+      }
+    }).execPopulate();
+
+    res.send(req.user.tasks);
+  } catch(e) {
+    res.status(500).send(e);
+  }
+});
+```
+
