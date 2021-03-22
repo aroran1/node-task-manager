@@ -21,6 +21,23 @@ const port = process.env.PORT || 3000;
 //   res.status(503).send('Site is under maintainence. Please try again in few hours.');
 // })
 
+
+// ******************************************************************************//
+// File Upload - Multer
+const multer = require('multer'); // require multer
+const upload = multer({  // create a new instance of multer
+	// make sure the dest folder is created before making the request
+	dest: 'images'
+});
+// create new route and pass upload.single as a middleware
+// multer need to know param name as 'upload' that the file will be attached with
+app.post('/upload', upload.single('upload'), (req, res) => { 
+	res.send();
+})
+
+// ******************************************************************************//
+
+
 // makes the parsed json accessible as an object
 app.use(express.json());
 
@@ -120,7 +137,7 @@ app.listen(port, () => {
 
 // 	const user = await User.findById('60539d6880502509d677f872');
 // 	await user.populate('tasks').execPopulate(); // this worked when task model was pass as object instead of schema
-// 	console.log(user.tasks); // returns an array of
+// 	console.log(user.tasks); // returns an array of 
 // }
 
 // main()
