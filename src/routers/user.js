@@ -223,7 +223,16 @@ router.delete('/users/me', auth, async (req, res) => {
 /**************************************************************************/
 // File upload
 const upload = multer({
-	dest: 'avatars'
+	dest: 'avatars',
+	limits: {
+		fieldSize: 1000000
+	},
+	fileFilter(req, file, cb) {
+		if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+			return cb(new Error('Pldease upload JPG, JPEG or PNG only!'));
+		}
+		cb(undefined, true);
+	}
 })
 
 router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {

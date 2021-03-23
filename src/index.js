@@ -27,7 +27,18 @@ const port = process.env.PORT || 3000;
 const multer = require('multer'); // require multer
 const upload = multer({  // create a new instance of multer
 	// make sure the dest folder is created before making the request
-	dest: 'images'
+	dest: 'images',
+	limits: {
+		fileSize: 1000000
+	},
+	fileFilter(req, file, cb) {
+		// if (!file.originalname.endsWith('.pdf')) { // useful for signle file type
+			if (!file.originalname.match(/\.(doc|docx)$/)) { // use regex for multiple file type matches 
+			return cb(new Error('Please upload a PDF!'))
+		}
+
+		cb(undefined, true);
+	}
 });
 // create new route and pass upload.single as a middleware
 // multer need to know param name as 'upload' that the file will be attached with
