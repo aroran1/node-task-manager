@@ -229,7 +229,7 @@ const upload = multer({
 	},
 	fileFilter(req, file, cb) {
 		if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-			return cb(new Error('Pldease upload JPG, JPEG or PNG only!'));
+			return cb(new Error('Pldease upload JPG, JPEG or PNG image only!'));
 		}
 		cb(undefined, true);
 	}
@@ -237,6 +237,8 @@ const upload = multer({
 
 router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
 	res.send();
+}, (error, req, res, next) => { // this patter is requited for express to understand the error
+	res.status(400).send({ error: error.message })
 });
 
 /**************************************************************************/

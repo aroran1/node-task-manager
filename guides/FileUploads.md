@@ -57,4 +57,40 @@ file type with multiple matched types. Use [regex 101](https://regex101.com/) fo
 	}
 ``` 
 
+### Error handling with mutler
+When the call fails from mutler the erroe are not returned as jason objects (instead html like format) which isn't not understood by Express. For Express to understand error and return it in the JSON format, you need somethhing like `(error, req, res, next)`.
+```
+const errorMiddleware = (req, res, next) => {
+	throw new Error('Error my middleware');
+}
+app.post('/upload', errorMiddleware, (req, res) => { 
+	res.send();
+}, (error, req, res, next) => { // this patter is requited for express to understand the error
+	res.status(400).send({ error: error.message })
+});
+```
+we can apply the same error handling patter to the Mutler now, like below
+```
+const upload = multer({
+	dest: 'avatars',
+	limits: {
+		fieldSize: 1000000
+	},
+	fileFilter(req, file, cb) {
+		if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+			return cb(new Error('Pldease upload JPG, JPEG or PNG image only!'));
+		}
+		cb(undefined, true);
+	}
+})
+
+router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
+	res.send();
+}, (error, req, res, next) => { // this patter is requited for express to understand the error
+	res.status(400).send({ error: error.message })
+});
+```
+
+
+
 **Look into running an anti virus scan on the uploaded file.**

@@ -40,11 +40,19 @@ const upload = multer({  // create a new instance of multer
 		cb(undefined, true);
 	}
 });
+
+// const errorMiddleware = (req, res, next) => {
+// 	throw new Error('Error my middleware');
+// }
 // create new route and pass upload.single as a middleware
 // multer need to know param name as 'upload' that the file will be attached with
+// app.post('/upload', errorMiddleware, (req, res) => { 
+
 app.post('/upload', upload.single('upload'), (req, res) => { 
 	res.send();
-})
+}, (error, req, res, next) => { // this patter is requited for express to understand the error
+	res.status(400).send({ error: error.message })
+});
 
 // ******************************************************************************//
 
