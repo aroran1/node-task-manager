@@ -141,6 +141,22 @@ To render this on the webpage via html we need to grab the `$binary` and pass it
   <img src="data:image/jpg;base64, /9j/4AAQSkZJRgABAQAASABIAAD/4QCMRXhpZgAATU0AKgAAAAgABQESAAMAAAABAAEAAAEaAAUAAAABAAAASgEbAAUAAAABAAAAUgEoAAMAAAABAAIAAIdpAAQAAAABAAAAWgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAB4CgAwAEAAAAAQAABDgAAAAA/+0AOFBob3Rvc2hvcCAzLjAAOEJJTQQEAAAAAAAAOEJJTQQlAAAAAAAQ1B2M2Y8AsgTpgAmY7PhCfv/AABEIBDgHgAMBIgACEQEDEQH/xAAfAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8">
     
 ```
+Make sure to delete the data before sending it back to the user with user info as this data is quite large.
+
+src/models/user.js
+```
+userSchema.methods.toJSON = function() {
+	const user = this;
+	const userObject = user.toObject();
+
+	delete userObject.password;
+	delete userObject.tokens;
+	delete userObject.avatar;
+
+	return userObject;
+}
+```
+
 ### Delete upload file route
 ```
 // Delete uploaded file
@@ -175,5 +191,9 @@ You can access it by this url locally in the browser by `http://localhost:3000/u
 ```
  <img src="http://localhost:3000/users/605719a39e5fd825e186020f/avatar" />
 ```
+
+### Image resizing
+Using npm Sharp which provides various methods to handle images. This an synchronise library so required to use async method.
+
 
 **Look into running an anti virus scan on the uploaded file.**

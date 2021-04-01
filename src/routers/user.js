@@ -1,6 +1,7 @@
 const express = require('express');
-const router = new express.Router();
 const multer = require('multer');
+const sharp = require('sharp');
+const router = new express.Router();
 // gets user models
 const User = require('../models/user');
 const auth = require('../middleware/auth');
@@ -236,7 +237,12 @@ const upload = multer({
 })
 
 router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
-	req.user.avatar = req.file.buffer;
+	// req.user.avatar = req.file.buffer;
+
+	// image resizing
+	const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer();
+	req.user.avatar = buffer;
+
 	await req.user.save();
 	res.send();
 }, (error, req, res, next) => { // this patter is requited for express to understand the error
@@ -261,7 +267,7 @@ router.get('/users/:id/avatar', async (req, res) => { // you can pass auth to au
 
 		// usually when you send the json response back Express automatically sets it for you
 		// but in this case we are sending back an image hence we need to set it manually
-		res.set('Content-Type', 'image/jpg')
+		res.set('Content-Type', 'image/png')
 		res.send(user.avatar);
 	} catch (e) {
 		res.status(404).send();

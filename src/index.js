@@ -24,35 +24,35 @@ const port = process.env.PORT || 3000;
 
 // ******************************************************************************//
 // File Upload - Multer
-const multer = require('multer'); // require multer
-const upload = multer({  // create a new instance of multer
-	// make sure the dest folder is created before making the request
-	dest: 'images',
-	limits: {
-		fileSize: 1000000
-	},
-	fileFilter(req, file, cb) {
-		// if (!file.originalname.endsWith('.pdf')) { // useful for signle file type
-			if (!file.originalname.match(/\.(doc|docx)$/)) { // use regex for multiple file type matches 
-			return cb(new Error('Please upload a PDF!'))
-		}
+// const multer = require('multer'); // require multer
+// const upload = multer({  // create a new instance of multer
+// 	// make sure the dest folder is created before making the request
+// 	dest: 'images',
+// 	limits: {
+// 		fileSize: 1000000
+// 	},
+// 	fileFilter(req, file, cb) {
+// 		// if (!file.originalname.endsWith('.pdf')) { // useful for signle file type
+// 			if (!file.originalname.match(/\.(doc|docx)$/)) { // use regex for multiple file type matches 
+// 			return cb(new Error('Please upload a PDF!'))
+// 		}
 
-		cb(undefined, true);
-	}
-});
+// 		cb(undefined, true);
+// 	}
+// });
 
-// const errorMiddleware = (req, res, next) => {
-// 	throw new Error('Error my middleware');
-// }
-// create new route and pass upload.single as a middleware
-// multer need to know param name as 'upload' that the file will be attached with
-// app.post('/upload', errorMiddleware, (req, res) => { 
+// // const errorMiddleware = (req, res, next) => {
+// // 	throw new Error('Error my middleware');
+// // }
+// // create new route and pass upload.single as a middleware
+// // multer need to know param name as 'upload' that the file will be attached with
+// // app.post('/upload', errorMiddleware, (req, res) => { 
 
-app.post('/upload', upload.single('upload'), (req, res) => { 
-	res.send();
-}, (error, req, res, next) => { // this patter is requited for express to understand the error
-	res.status(400).send({ error: error.message })
-});
+// app.post('/upload', upload.single('upload'), (req, res) => { 
+// 	res.send();
+// }, (error, req, res, next) => { // this patter is requited for express to understand the error
+// 	res.status(400).send({ error: error.message })
+// });
 
 // ******************************************************************************//
 
