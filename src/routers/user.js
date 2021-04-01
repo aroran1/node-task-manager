@@ -223,7 +223,7 @@ router.delete('/users/me', auth, async (req, res) => {
 /**************************************************************************/
 // File upload
 const upload = multer({
-	dest: 'avatars',
+	// dest: 'avatars', // only require for storing files locally, not needed for buffer
 	limits: {
 		fieldSize: 1000000
 	},
@@ -235,7 +235,9 @@ const upload = multer({
 	}
 })
 
-router.post('/users/me/avatar', auth, upload.single('avatar'), (req, res) => {
+router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
+	req.user.avatar = req.file.buffer;
+	await req.user.save();
 	res.send();
 }, (error, req, res, next) => { // this patter is requited for express to understand the error
 	res.status(400).send({ error: error.message })
