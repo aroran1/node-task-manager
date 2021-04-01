@@ -235,7 +235,7 @@ const upload = multer({
 	}
 })
 
-router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
+router.post('/users/me/avatar', auth, upload.single('avatar'), (req, res) => {
 	res.send();
 }, (error, req, res, next) => { // this patter is requited for express to understand the error
 	res.status(400).send({ error: error.message })

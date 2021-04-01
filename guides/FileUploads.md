@@ -91,6 +91,16 @@ router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
 });
 ```
 
+### Authentication
+User Authentication will be handled by auth middleware as per other routes as well which will happen before the upload middleware as if the user is not aiuthenticated they shouldn't be allowed to upload a file.
+```
+router.post('/users/me/avatar', auth, upload.single('avatar'), (req, res) => {
+	res.send();
+}, (error, req, res, next) => { // this patter is requited for express to understand the error
+	res.status(400).send({ error: error.message })
+});
+```
+
 
 
 **Look into running an anti virus scan on the uploaded file.**
