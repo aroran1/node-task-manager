@@ -33,5 +33,4 @@ sgMail
     console.error(error)
   })
 ```
-
-
+- run command `node src/emails/account.js` before verifying from send grid
