@@ -243,6 +243,32 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) 
 	res.status(400).send({ error: error.message })
 });
 
+// Delete uploaded file
+router.delete('/users/me/avatar', auth, async(req, res) => {
+	req.user.avatar = undefined;
+	await req.user.save();
+	res.send();
+});
+
+// GET image
+router.get('/users/:id/avatar', async (req, res) => { // you can pass auth to authenticate
+	try {
+		const user = await User.findById(req.params.id);
+
+		if (!user || !user.avatar) {
+			throw new Error();
+		}
+
+		// usually when you send the json response back Express automatically sets it for you
+		// but in this case we are sending back an image hence we need to set it manually
+		res.set('Content-Type', 'image/jpg')
+		res.send(user.avatar);
+	} catch (e) {
+		res.status(404).send();
+	}
+});
+
+
 /**************************************************************************/
 
 module.exports = router;
