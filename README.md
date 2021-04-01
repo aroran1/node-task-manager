@@ -16,6 +16,7 @@ A node project as a task-manager to create mongodb and apis.
 - [Sorting, Pagination and Filtering](./guides/DataEfficiency.md)
 - [File Uploads](./guides/FileUploads.md)
 - [Sending Emails](./SendingEmails.md)
+- [Environments](./Environments.md)
 
 
 ### Tutorial sepcific trial files

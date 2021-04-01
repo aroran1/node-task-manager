@@ -8,7 +8,7 @@ const auth = async (req, res, next) => {
 	try {
 		const token = req.header('Authorization').replace('Bearer ', '');
 		// console.log(token);
-		const deccoded = jwt.verify(token, 'thisismynodecourse');
+		const deccoded = jwt.verify(token, process.env.JWT_SECRET);
 
 		// using findOne instead of findById is because we want to finds the user with Id but also
 		// want to make the token exist in the tokens array so when user logs out
