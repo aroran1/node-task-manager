@@ -15,6 +15,7 @@ A node project as a task-manager to create mongodb and apis.
 - [User Access Restriction and Task relation](./guides/UserTaskRelation.md)
 - [Sorting, Pagination and Filtering](./guides/DataEfficiency.md)
 - [File Uploads](./guides/FileUploads.md)
+- [Sending Emails](./SendingEmails.md)
 
 
 ### Tutorial sepcific trial files
