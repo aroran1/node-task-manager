@@ -18,6 +18,7 @@ A node project as a task-manager to create mongodb and apis.
 - [Sending Emails](./SendingEmails.md)
 - [Environments](./Environments.md)
 - [Production MongoDB Setup](./ProductionMongoDBSetup.md)
+- [Heroku Deployment](./HerokuDeployment.md)
 
 
 ### Tutorial sepcific trial files
@@ -32,3 +33,7 @@ The folder structure in the src folder is tidy-up as per production build, statr
 
 ### Actual Github resource
 [https://github.com/PacktPublishing/The-Complete-Node.js-Developer-Course-3rd-Edition-](https://github.com/PacktPublishing/The-Complete-Node.js-Developer-Course-3rd-Edition-)
+
+### Heroku
+Heroku git URL [https://git.heroku.com/aroran-task-manager.git](https://git.heroku.com/aroran-task-manager.git)
+Heroku Domain [https://aroran-task-manager.herokuapp.com/](https://aroran-task-manager.herokuapp.com/)
