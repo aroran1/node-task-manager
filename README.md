@@ -17,6 +17,7 @@ A node project as a task-manager to create mongodb and apis.
 - [File Uploads](./guides/FileUploads.md)
 - [Sending Emails](./SendingEmails.md)
 - [Environments](./Environments.md)
+- [Production MongoDB Setup](./ProductionMongoDBSetup.md)
 
 
 ### Tutorial sepcific trial files
