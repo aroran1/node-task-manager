@@ -22,4 +22,7 @@ Terminal:
     - you can change `myFirstDatabase` to `task-manager-api` in the url and make sure to wrap it in single quotes whne passing it to set as MONGODB_URL='mongodb+srv://TaskManagerApp:<password>@cluster0.ndsrj.mongodb.net/task-manager-api?retryWrites=true&w=majority' (to avoid special character)
   - PORT is not required as its maintained and managed by Heroku automatically
 - `git push heroku master` to push to heroku remote which was  set up when we used `heroku create`
+  - if you see below error the try running `git push heroku HEAD:master`
+  `error: src refspec master does not match any`
+  - that'll add all the files to heroku server and will install all the dependencies which may take longer for the first time
   

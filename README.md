@@ -19,6 +19,7 @@ A node project as a task-manager to create mongodb and apis.
 - [Environments](./Environments.md)
 - [Production MongoDB Setup](./ProductionMongoDBSetup.md)
 - [Heroku Deployment](./HerokuDeployment.md)
+- [Tests](./Tests.md)
 
 
 ### Tutorial sepcific trial files
