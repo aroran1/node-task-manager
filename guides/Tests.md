@@ -205,3 +205,30 @@ Making sure tests are more meaningful you can test assertions like
 
 ## Emails
 Testing emails etc may not get tested as expected but that's okay but we need to make sure out tests don't run us out of emails budgets from sendgrid. To prevent that, create `__mocks__` folder in tests folder and create the same folder/file structure which is used for sendgrid within mocks `__mocks__/@sendgrid/mail`. Now in main.js add the mock  `setApiKey` and `send` methods and export them to make them accessible.
+
+### List od additional test cases
+```
+//
+// User Test Ideas
+//
+// Should not signup user with invalid name/email/password
+// Should not update user if unauthenticated
+// Should not update user with invalid name/email/password
+// Should not delete user if unauthenticated
+
+//
+// Task Test Ideas
+//
+// Should not create task with invalid description/completed
+// Should not update task with invalid description/completed
+// Should delete user task
+// Should not delete task if unauthenticated
+// Should not update other users task
+// Should fetch user task by id
+// Should not fetch user task by id if unauthenticated
+// Should not fetch other users task by id
+// Should fetch only completed tasks
+// Should fetch only incomplete tasks
+// Should sort tasks by description/completed/createdAt/updatedAt
+// Should fetch page of tasks
+```

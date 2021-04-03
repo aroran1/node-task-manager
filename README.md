@@ -15,11 +15,11 @@ A node project as a task-manager to create mongodb and apis.
 - [User Access Restriction and Task relation](./guides/UserTaskRelation.md)
 - [Sorting, Pagination and Filtering](./guides/DataEfficiency.md)
 - [File Uploads](./guides/FileUploads.md)
-- [Sending Emails](./SendingEmails.md)
-- [Environments](./Environments.md)
-- [Production MongoDB Setup](./ProductionMongoDBSetup.md)
-- [Heroku Deployment](./HerokuDeployment.md)
-- [Tests](./Tests.md)
+- [Sending Emails](./guides/SendingEmails.md)
+- [Environments](./guides/Environments.md)
+- [Production MongoDB Setup](./guides/ProductionMongoDBSetup.md)
+- [Heroku Deployment](./guides/HerokuDeployment.md)
+- [Tests](./guides/Tests.md)
 
 
 ### Tutorial sepcific trial files

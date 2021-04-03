@@ -1,25 +1,32 @@
 const request = require('supertest');
-const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
+
+// moved to fixtures/db.js
+// const jwt = require('jsonwebtoken');
+// const mongoose = require('mongoose');
 const app = require('../src/app');
 const User = require('../src/models/user');
+const { userOneId, userOne, setupDatabase } = require('./fixtures/db')
 
-const userOneId = new mongoose.Types.ObjectId();
-const userOne = {
-  _id: userOneId,
-  name: 'Louis Briggs',
-  email: 'louisbriggs@heathwallace.com',
-  password: 'louisbriggs123!',
-  tokens: [{
-    token: jwt.sign({_id: userOneId}, process.env.JWT_SECRET)
-  }]
-}
+// beforeEach(async () => {
+//   // console.log('beforeEach')
+//   // moved to fixtures/db.js
+//   // await User.deleteMany(); // emptying db 
+//   // await new User(userOne).save();
+// });
 
-beforeEach(async () => {
-  // console.log('beforeEach')
-  await User.deleteMany(); // emptying db 
-  await new User(userOne).save();
-});
+beforeEach(setupDatabase);
+
+// moved to fixtures/db.js
+// const userOneId = new mongoose.Types.ObjectId();
+// const userOne = {
+//   _id: userOneId,
+//   name: 'Louis Briggs',
+//   email: 'louisbriggs@heathwallace.com',
+//   password: 'louisbriggs123!',
+//   tokens: [{
+//     token: jwt.sign({_id: userOneId}, process.env.JWT_SECRET)
+//   }]
+// }
 
 // could also be done as done instead of async
 // beforeEach((done) => {
@@ -104,4 +111,36 @@ test('Should not detete users profile for unauthenticated user', async () => {
     .delete('/users/me')
     .send()
     .expect(401);
+})
+
+test('should upload avatar image', async () => {
+  await request(app)
+    .post('/users/me/avatar')
+    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .attach('avatar', 'tests/fixtures/profile-pic.jpg')
+    .expect(200);
+  const user = await User.findById(userOneId);
+  expect(user.avatar).toEqual(expect.any(Buffer));
+})
+
+test('should update valid user fields', async () => {
+  await request(app)
+    .patch('/users/me')
+    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .send({
+      name: 'Jess'
+    })
+    .expect(200);
+  const user = await User.findById(userOneId);
+  expect(user.name).toEqual('Jess');
+})
+
+test('should not update valid user fields', async () => {
+  await request(app)
+    .patch('/users/me')
+    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .send({
+      location: 'Delhi'
+    })
+    .expect(400);
 })
