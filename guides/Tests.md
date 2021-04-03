@@ -106,3 +106,79 @@ Add `"test": "jest --watch"` to run the tests as developing (press a)
  › Press q to quit watch mode.
  › Press Enter to trigger a test run.
 ```
+
+## Async tests
+To test a normal function we just assert by using expect and toBe but when we are working with async functions we need to make sure the test waits enough time to test the outcome. Here are different approaches to do that with setTimeout with done, or .then and async/await.
+
+```
+// Async test
+// test('Async demo test', () => {
+//   expect(1).toBe(2); // test fails correctly
+// })
+
+// test not waiting 2 seconds
+// test('Async demo test', () => {
+//   setTimeout(() => {
+//     expect(1).toBe(2);
+//   }, 2000)
+// })
+
+// Aproach 1 with done
+test('Async demo test', (done) => {
+  setTimeout(() => {
+    expect(1).toBe(1); //expect(1).toBe(2);
+    done();
+  }, 2000)
+})
+
+// Aproach 1 with promise / then
+test('should add two numbers', (done) => {
+  add(2, 3).then((sum) => {
+    expect(sum).toBe(5);
+    done(); 
+  });
+})
+
+// Aproach 2 with asunc / await
+test('should add two numbers async/await', async () => {
+  const sum = await add(20, 23);
+  expect(sum).toBe(43);
+})
+```
+
+## Jest setup
+Setting up tests to use differe mongoDB by using test.env file.
+Also setting jest object and testEnvironment as `node` by default its set as `jsdom`.
+```
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
+    "test": "env-cmd -f ./config/test.env jest --watch"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 30000
+  },
+```
+
+## Supertests
+We are using [Spuertests](https://www.npmjs.com/package/supertest) to test the express application. Install it with `npm install supertest --save-dev`. Supertests doesn't ~need your db. It also doesn't~ need your express application to run to tests the routes, its just need the express application to set it up.
+
+To setup supertests we need to import the express app inside the test file but we don't want to listen to any server so we do a little code refactoring with `src/app.js` and `src/index.js` which enables us to import app.js to our test file.
+
+tests/user.test.js
+```
+const { TestScheduler } = require('jest');
+const request = require('supertest');
+const app = require('../src/app');
+
+test('Should signup a new user', async () => {
+  await request(app).post('/users').send({
+    age: 27,
+    name: 'Andrew Mead',
+    email: 'andymead@udemy.com',
+    password: 'AndrewMead'
+  }).expect(201);
+})
+```
+To make the above test case pass make sure your MongoDB Local instance is running and connect the compass to it. and once the test has run you can see a new collection as `task-manager-api-test` has also been created. You also need to make sure each time the runs, it clears the db as well otherwise the test cases will interrup diffetrent scenarios.
