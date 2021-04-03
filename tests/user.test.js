@@ -32,19 +32,38 @@ beforeEach(async () => {
 // });
 
 test('Should signup a new user', async () => {
-  await request(app).post('/users').send({
+  const response = await request(app).post('/users').send({
     age: 27,
     name: 'Andrew Mead',
     email: 'andymead@udemy.com',
     password: 'AndrewMead'
   }).expect(201);
+
+  // Assert that the database was changed correctly 
+  const user = await User.findById(response.body.user._id);
+  expect(user).not.toBeNull();
+
+  // Assertions about the response
+  // expect(response.body.user.name).toBe('Andrew Mead');
+  // OR
+  expect(response.body).toMatchObject({
+    user: {
+      age: 27,
+      name: 'Andrew Mead',
+      email: 'andymead@udemy.com',
+    },
+    token: user.tokens[0].token
+  })
+  expect(user.password).not.toBe('AndrewMead');
 })
 
 test('Should login existing user', async () => {
-  await request(app).post('/users/login').send({
+  const response = await request(app).post('/users/login').send({
     email: userOne.email,
     password: userOne.password
   }).expect(200);
+  const user = await User.findById(userOneId);
+  expect(response.body.token).toBe(user.tokens[1].token);
 })
 
 test('Should not login with incorrect login details', async () => {
@@ -75,6 +94,8 @@ test('Should detete users profile for authenticated user', async () => {
     .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
     .send()
     .expect(200);
+  const user = await User.findById(userOneId);
+  expect(user).toBeNull();
 })
 
 
