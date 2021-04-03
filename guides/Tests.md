@@ -182,3 +182,26 @@ test('Should signup a new user', async () => {
 })
 ```
 To make the above test case pass make sure your MongoDB Local instance is running and connect the compass to it. and once the test has run you can see a new collection as `task-manager-api-test` has also been created. You also need to make sure each time the runs, it clears the db as well otherwise the test cases will interrup diffetrent scenarios.
+
+Making sure tests are more meaningful you can test assertions like
+```
+  // Assert that the database was changed correctly 
+  const user = await User.findById(response.body.user._id);
+  expect(user).not.toBeNull();
+
+  // Assertions about the response
+  // expect(response.body.user.name).toBe('Andrew Mead');
+  // OR
+  expect(response.body).toMatchObject({
+    user: {
+      age: 27,
+      name: 'Andrew Mead',
+      email: 'andymead@udemy.com',
+    },
+    token: user.tokens[0].token
+  })
+  expect(user.password).not.toBe('AndrewMead');
+```
+
+## Emails
+Testing emails etc may not get tested as expected but that's okay but we need to make sure out tests don't run us out of emails budgets from sendgrid. To prevent that, create `__mocks__` folder in tests folder and create the same folder/file structure which is used for sendgrid within mocks `__mocks__/@sendgrid/mail`. Now in main.js add the mock  `setApiKey` and `send` methods and export them to make them accessible.
