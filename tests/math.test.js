@@ -1,4 +1,4 @@
-const { calculateTip, fahrenheitToCelsius, celsiusToFahrenheit } = require('../src/math');
+const { calculateTip, fahrenheitToCelsius, celsiusToFahrenheit, add } = require('../src/math');
 
 // dummy tests
 // test('Hello World!', () => {
@@ -38,6 +38,40 @@ test('should convert 32 F to 0 C', () => {
 })
 
 test('should convert 0 C to 32 F', () => {
-  const total =   celsiusToFahrenheit(0);
+  const total = celsiusToFahrenheit(0);
   expect(total).toBe(32);
+})
+
+// Async test
+// test('Async demo test', () => {
+//   expect(1).toBe(2); // test fails correctly
+// })
+
+// test not waiting 2 seconds
+// test('Async demo test', () => {
+//   setTimeout(() => {
+//     expect(1).toBe(2);
+//   }, 2000)
+// })
+
+// Aproach 1 with done
+test('Async demo test', (done) => {
+  setTimeout(() => {
+    expect(1).toBe(1); //expect(1).toBe(2);
+    done();
+  }, 2000)
+})
+
+// Aproach 1 with promise / then
+test('should add two numbers', (done) => {
+  add(2, 3).then((sum) => {
+    expect(sum).toBe(5);
+    done(); 
+  });
+})
+
+// Aproach 2 with asunc / await
+test('should add two numbers async/await', async () => {
+  const sum = await add(20, 23);
+  expect(sum).toBe(43);
 })

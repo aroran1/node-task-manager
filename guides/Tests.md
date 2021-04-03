@@ -97,3 +97,12 @@ Tests Benefits:
   - Profiling - as you build up on test cases the developent can become faster overtime 
 - Peace of mind
 
+Add `"test": "jest --watch"` to run the tests as developing (press a)
+```
+› Press a to run all tests.
+ › Press f to run only failed tests.
+ › Press p to filter by a filename regex pattern.
+ › Press t to filter by a test name regex pattern.
+ › Press q to quit watch mode.
+ › Press Enter to trigger a test run.
+```
